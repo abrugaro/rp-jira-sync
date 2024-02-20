@@ -56,9 +56,20 @@ export const createSubTask = async (parent: string, title: string, description: 
     return doPostRequest(data);
 }
 
+export const search = async (searchTerm: string) => {
+    const response = await fetch(`${ENV.jiraApiUrl}/search?jql=project=MTA AND ${searchTerm}`, {
+        headers,
+    });
+    if (response.status >= 400) {
+        throw new Error(`Status ${response.status} when searching issues wit error ${await response.text()}`);
+    }
+
+    return response.json();
+}
+
 // TODO type data param
 const doPostRequest = async <T>(data: any): Promise<T> => {
-    const response = await fetch(ENV.jiraApiUrl, {
+    const response = await fetch(`${ENV.jiraApiUrl}/issue`, {
         method: 'POST',
         headers,
         body: JSON.stringify(data)

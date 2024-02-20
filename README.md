@@ -16,3 +16,10 @@
 ```bash
 npx npx webpack --config webpack.config.js 
 ```
+
+# Execute
+
+
+```bash
+node dist/bundle.js 
+```

@@ -18,7 +18,14 @@
 # Tech Debt
 
  - Create a good Logger class 
+ - Create an actually useful README
 
+# Install
+
+1. Clone the repository
+2. Copy the `.env.example`
+ file and remove the `.example` suffix
+3. Docker build and Docker run
 # Build
 
 ```bash

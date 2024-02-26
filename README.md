@@ -7,19 +7,27 @@
 - [X] Group items by test suite
 - [X] Create a Jira Task for each suite
 - [X] Create a task for the launch and subtasks for each failed suite
-- [ ] Check if a Jira Task for that run is already created before creating one
+- [X] Check if a Jira Task for that run is already created before creating one
+- [X] Create an endpoint to trigger the execution
+- [ ] Create a DockerFile for the project
+- [ ] Save logs to files for late debugging
 - [ ] Add item logs to the task description
 - [ ] Filter tests that are affected by bugs to avoid creating tasks
+- [ ] Create JSON file to associate features to owners
+
+# Tech Debt
+
+ - Create a good Logger class 
 
 # Build
 
 ```bash
-npx npx webpack --config webpack.config.js 
+npm run build 
 ```
 
 # Execute
 
 
 ```bash
-node dist/bundle.js 
+npm run start
 ```

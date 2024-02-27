@@ -9,6 +9,7 @@ ENV JIRA_API_URL=""
 ENV JIRA_PROJECT=""
 
 COPY . .
+COPY env.example.ts env.ts
 RUN npm install
 RUN npm run build
 EXPOSE 3000

@@ -1,4 +1,14 @@
 import {main} from "./core";
+import { Agent, setGlobalDispatcher } from 'undici';
+
+// Ignore self signed certs
+const agent = new Agent({
+    connect: {
+        rejectUnauthorized: false
+    }
+});
+
+setGlobalDispatcher(agent);
 
 const express = require('express')
 const app = express()

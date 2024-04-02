@@ -3,6 +3,7 @@ import {getLaunchById, getLaunchFailedItems} from "./requests/report-portal";
 import {ReportPortalItem} from "./model/report-portal-item";
 import {Logger} from "./model/logger";
 import {Response} from "./model/response";
+import {OWNERS} from "../owners";
 
 export const main = async (id: number) => {
     const itemsBySuite: { [key: string]: ReportPortalItem[] } = {};
@@ -13,6 +14,7 @@ export const main = async (id: number) => {
         data: ""
     }
 
+    // Check if a task already exists for the specified run
     try {
         const searchResult = await search(`summary ~ ${id}`);
         if (searchResult.total > 0) {
@@ -26,10 +28,12 @@ export const main = async (id: number) => {
         return apiResponse;
     }
 
+    // Get launch data
     const launchResponse = await getLaunchById(id);
     logger.debug(launchResponse);
     const launchId = launchResponse.content[0].id;
 
+    // Get launch failed items details
     const launchFailedItems = await getLaunchFailedItems(launchId);
     logger.debug(launchFailedItems);
     if (!launchFailedItems) {
@@ -44,6 +48,7 @@ export const main = async (id: number) => {
         return apiResponse;
     }
 
+    // Map failed items by their test suite
     launchFailedItems.content.forEach((item: any) => {
         const suiteName = item.pathNames.itemPaths[0].name
         if (!itemsBySuite[suiteName]) {
@@ -73,6 +78,7 @@ export const main = async (id: number) => {
                 jiraTask.key,
                 `[QE] Fix JF for ${suite}`,
                 itemsBySuite[suite].map(item => item.description).join('\n\n'),
+                findOwner(suite)
             );
         }
         apiResponse.success = true;
@@ -86,4 +92,13 @@ export const main = async (id: number) => {
         return apiResponse;
     }
 
+}
+
+export const findOwner = (suite: string) => {
+    const owner = OWNERS[suite];
+    if (owner) {
+        return owner;
+    }
+
+    return  Object.keys(OWNERS).find(suiteName => suiteName.toLowerCase().includes(suite.toLowerCase()));
 }

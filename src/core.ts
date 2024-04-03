@@ -3,10 +3,9 @@ import {getLaunchById, getLaunchFailedItems} from "./requests/report-portal";
 import {ReportPortalItem} from "./model/report-portal-item";
 import {Logger} from "./model/logger";
 import {Response} from "./model/response";
-//import {OWNERS} from "../owners";
+import {OWNERS} from "../owners";
 
 export const main = async (id: number, logger?: Logger) => {
-    const itemsBySuite: { [key: string]: ReportPortalItem[] } = {};
     if (!logger) {
         logger = new Logger();
     }
@@ -33,6 +32,11 @@ export const main = async (id: number, logger?: Logger) => {
     // Get launch data
     const launchResponse = await getLaunchById(id);
     logger.debug(launchResponse);
+    if (!launchResponse.content || !launchResponse.content[0]) {
+        logger.error("Launch Response error");
+        apiResponse.data = logger.getLogs();
+        return apiResponse;
+    }
     const launchId = launchResponse.content[0].id;
 
     // Get launch failed items details
@@ -51,13 +55,21 @@ export const main = async (id: number, logger?: Logger) => {
     }
 
     // Map failed items by their test suite
-    launchFailedItems.content.forEach((item: any) => {
-        const suiteName = item.pathNames.itemPaths[0].name
-        if (!itemsBySuite[suiteName]) {
-            itemsBySuite[suiteName] = [];
-        }
-        itemsBySuite[suiteName].push(item);
-    });
+    const itemsBySuite: { [key: string]: ReportPortalItem[] } = {};
+    try {
+        launchFailedItems.content.forEach((item: any) => {
+            const suiteName = item.pathNames.itemPaths[0].name
+            if (!itemsBySuite[suiteName]) {
+                itemsBySuite[suiteName] = [];
+            }
+            itemsBySuite[suiteName].push(item);
+        });
+    } catch (e) {
+        logger.error("Error while mapping suites");
+        logger.error(e);
+        apiResponse.data = logger.getLogs();
+        return apiResponse;
+    }
 
     let jiraTask = null;
     try {
@@ -79,7 +91,8 @@ export const main = async (id: number, logger?: Logger) => {
             await createSubTask(
                 jiraTask.key,
                 `[QE] Fix JF for ${suite}`,
-                itemsBySuite[suite].map(item => item.description).join('\n\n')
+                itemsBySuite[suite].map(item => item.description).join('\n\n'),
+                findOwner(suite)
             );
         }
         apiResponse.success = true;
@@ -94,7 +107,7 @@ export const main = async (id: number, logger?: Logger) => {
     }
 
 }
-/*
+
 export const findOwner = (suite: string) => {
     const owner = OWNERS[suite];
     if (owner) {
@@ -102,4 +115,4 @@ export const findOwner = (suite: string) => {
     }
 
     return Object.keys(OWNERS).find(suiteName => suiteName.toLowerCase().includes(suite.toLowerCase()));
-}*/
+}

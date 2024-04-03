@@ -77,8 +77,7 @@ export const main = async (id: number) => {
             await createSubTask(
                 jiraTask.key,
                 `[QE] Fix JF for ${suite}`,
-                itemsBySuite[suite].map(item => item.description).join('\n\n'),
-                findOwner(suite)
+                itemsBySuite[suite].map(item => item.description).join('\n\n')
             );
         }
         apiResponse.success = true;

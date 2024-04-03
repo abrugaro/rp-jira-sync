@@ -75,7 +75,7 @@ export const main = async (id: number, logger?: Logger) => {
     try {
         jiraTask = await createTask(
             `[QE] Fix JF for Report Portal run ${launchId}`,
-            'To be defined',
+            `Fix failures for RP Run ${launchResponse.content[0].number}\n ${launchResponse.content[0].description}`,
             null
         );
     } catch (e) {
@@ -88,10 +88,12 @@ export const main = async (id: number, logger?: Logger) => {
 
     try {
         for (let suite of Object.keys(itemsBySuite)) {
+            let description =  `RP Run #${launchResponse.content[0].number}\n${launchResponse.content[0].description}\n\n`;
+            description += itemsBySuite[suite].map(item => item.description).join('\n\n');
             await createSubTask(
                 jiraTask.key,
                 `[QE] Fix JF for ${suite}`,
-                itemsBySuite[suite].map(item => item.description).join('\n\n'),
+                description,
                 findOwner(suite)
             );
         }

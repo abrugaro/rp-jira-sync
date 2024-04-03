@@ -5,9 +5,8 @@ import {Logger} from "./model/logger";
 import {Response} from "./model/response";
 import {OWNERS} from "../owners";
 
-export const main = async (id: number) => {
+export const main = async (id: number, logger?: Logger) => {
     const itemsBySuite: { [key: string]: ReportPortalItem[] } = {};
-    const logger = new Logger();
     const apiResponse: Response<string> = {
         success: false,
         message: "Something failed, see the logs for more info",

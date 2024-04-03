@@ -29,7 +29,7 @@ app.get('/:id', async (req: any, res: any) => {
     }
 
     try {
-        const result = await main(+id);
+        const result = await main(+id, logger);
         res.send(result);
     } catch (e) {
         logger.error("General error");

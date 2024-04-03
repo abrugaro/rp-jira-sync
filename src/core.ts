@@ -3,10 +3,13 @@ import {getLaunchById, getLaunchFailedItems} from "./requests/report-portal";
 import {ReportPortalItem} from "./model/report-portal-item";
 import {Logger} from "./model/logger";
 import {Response} from "./model/response";
-import {OWNERS} from "../owners";
+//import {OWNERS} from "../owners";
 
 export const main = async (id: number, logger?: Logger) => {
     const itemsBySuite: { [key: string]: ReportPortalItem[] } = {};
+    if (!logger) {
+        logger = new Logger();
+    }
     const apiResponse: Response<string> = {
         success: false,
         message: "Something failed, see the logs for more info",
@@ -91,7 +94,7 @@ export const main = async (id: number, logger?: Logger) => {
     }
 
 }
-
+/*
 export const findOwner = (suite: string) => {
     const owner = OWNERS[suite];
     if (owner) {
@@ -99,4 +102,4 @@ export const findOwner = (suite: string) => {
     }
 
     return Object.keys(OWNERS).find(suiteName => suiteName.toLowerCase().includes(suite.toLowerCase()));
-}
+}*/

@@ -1,1 +1,1 @@
-export const OWNERS: {[key: string]: string} = JSON.parse(process.env.OWNERS);
+//export const OWNERS: {[key: string]: string} = JSON.parse(process.env.OWNERS);

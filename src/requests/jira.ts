@@ -91,7 +91,7 @@ const doIssuePostRequest = async <T>(data: any): Promise<T> => {
 }
 
 // TODO type data param
-const doIssuePutRequest = async <T>(data: any, issueId: string): Promise<T> => {
+const doIssuePutRequest = async (data: any, issueId: string): Promise<string> => {
 
     const response = await fetch(
         `${ENV.jiraApiUrl}/issue/${issueId}`, {
@@ -103,5 +103,5 @@ const doIssuePutRequest = async <T>(data: any, issueId: string): Promise<T> => {
         throw new Error(`Status ${response.status} when creating or updating Issue wit error ${await response.text()}`);
     }
 
-    return response.json();
+    return response.text();
 }

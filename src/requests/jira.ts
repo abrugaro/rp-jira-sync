@@ -81,7 +81,8 @@ const doIssuePostRequest = async <T>(data: any, issueId?: string): Promise<T> =>
     if (issueId) {
         url += `/${issueId}`
     }
-    const response = await fetch(``, {
+    const response = await fetch(
+        url, {
         method: 'POST',
         headers,
         body: JSON.stringify(data)

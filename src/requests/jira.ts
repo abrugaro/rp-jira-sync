@@ -1,5 +1,6 @@
 import {ENV} from "../../env";
-import {JiraIssueParams, JiraIssueResponse, JiraIssueUpdateParams} from "../model/jira-issue";
+import {JiraIssueParams, JiraIssueResponse} from "../model/jira-issue";
+import {RecursivePartial} from "../model/common";
 
 const headers = {
     Authorization: `Bearer ${ENV.jiraAccessToken}`,
@@ -57,7 +58,7 @@ export const createSubTask = async (parent: string, title: string, description: 
     return doIssuePostRequest(data);
 }
 
-export const updateIssue = async (issueId: string, data: Partial<JiraIssueUpdateParams> ) => {
+export const updateIssue = async (issueId: string, data: RecursivePartial<JiraIssueParams> ) => {
     return doIssuePostRequest(data);
 }
 

@@ -59,7 +59,7 @@ export const createSubTask = async (parent: string, title: string, description: 
 }
 
 export const updateIssue = async (issueId: string, data: RecursivePartial<JiraIssueParams> ) => {
-    return doIssuePostRequest(data);
+    return doIssuePostRequest(data, issueId);
 }
 
 

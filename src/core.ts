@@ -96,6 +96,7 @@ export const main = async (id: number, logger?: Logger) => {
                 description,
                 findOwner(suite)
             );
+            console.log(res);
             await updateIssue((res as any).id, {fields: {customfield_12310243: 2}});
         }
         apiResponse.success = true;

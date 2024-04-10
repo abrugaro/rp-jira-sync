@@ -1,4 +1,4 @@
-import {createSubTask, createTask, search} from "./requests/jira";
+import {createSubTask, createTask, search, updateIssue} from "./requests/jira";
 import {getLaunchById, getLaunchFailedItems} from "./requests/report-portal";
 import {ReportPortalItem} from "./model/report-portal-item";
 import {Logger} from "./model/logger";
@@ -90,12 +90,13 @@ export const main = async (id: number, logger?: Logger) => {
         for (let suite of Object.keys(itemsBySuite)) {
             let description =  `RP Run #${launchResponse.content[0].number}\n${launchResponse.content[0].description}\n\n`;
             description += itemsBySuite[suite].map(item => item.description).join('\n\n');
-            await createSubTask(
+            const res = await createSubTask(
                 jiraTask.key,
                 `[QE] Fix JF for ${suite}`,
                 description,
                 findOwner(suite)
             );
+            await updateIssue((res as any).id, {fields: {customfield_12310243: 2}});
         }
         apiResponse.success = true;
         apiResponse.message = "Ok";

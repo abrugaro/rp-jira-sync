@@ -59,7 +59,7 @@ export const createSubTask = async (parent: string, title: string, description: 
 }
 
 export const updateIssue = async (issueId: string, data: RecursivePartial<JiraIssueParams> ) => {
-    return doIssuePostRequest(data, issueId);
+    return doIssuePutRequest(data, issueId);
 }
 
 
@@ -76,14 +76,26 @@ export const search = async (searchTerm: string) => {
 }
 
 // TODO type data param
-const doIssuePostRequest = async <T>(data: any, issueId?: string): Promise<T> => {
-    let url = `${ENV.jiraApiUrl}/issue`;
-    if (issueId) {
-        url += `/${issueId}`
-    }
+const doIssuePostRequest = async <T>(data: any): Promise<T> => {
     const response = await fetch(
-        url, {
+        `${ENV.jiraApiUrl}/issue`, {
         method: 'POST',
+        headers,
+        body: JSON.stringify(data)
+    });
+    if (response.status >= 400) {
+        throw new Error(`Status ${response.status} when creating or updating Issue wit error ${await response.text()}`);
+    }
+
+    return response.json();
+}
+
+// TODO type data param
+const doIssuePutRequest = async <T>(data: any, issueId: string): Promise<T> => {
+
+    const response = await fetch(
+        `${ENV.jiraApiUrl}/issue/${issueId}`, {
+        method: 'PUT',
         headers,
         body: JSON.stringify(data)
     });

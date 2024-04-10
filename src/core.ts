@@ -116,5 +116,5 @@ export const findOwner = (suite: string) => {
         return owner;
     }
 
-    return Object.keys(OWNERS).find(suiteName => suiteName.toLowerCase().includes(suite.toLowerCase()));
+    return Object.keys(OWNERS).find(suiteName => suite.toLowerCase().includes(suiteName.toLowerCase()));
 }

@@ -11,6 +11,7 @@ export interface JiraIssueParams {
         project: { key: string; };
         summary: string;
         description: string;
+        customfield_12310243?: number, // Story Points
         issuetype: { name: string; };
         parent?: { key: string };
         labels: string[];

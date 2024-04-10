@@ -36,6 +36,7 @@ export const createSubTask = async (parent: string, title: string, description: 
             project: {key: ENV.jiraProject},
             summary: title,
             description: description,
+            customfield_12310243: 2,
             issuetype: {name: "Sub-task"},
             parent: {
                 key: parent

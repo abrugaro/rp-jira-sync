@@ -91,7 +91,7 @@ export const main = async (id: number, logger?: Logger) => {
     try {
         for (let suite of Object.keys(itemsBySuite)) {
             const res = await createIssue(
-                IssueTypes.Task,
+                IssueTypes.SubTask,
                 `[QE] Fix JF for ${suite}`,
                 launchToTaskDescription(launchResponse.content[0], itemsBySuite[suite]),
                 findOwner(suite),

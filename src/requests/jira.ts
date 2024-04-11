@@ -1,6 +1,7 @@
 import {ENV} from "../../env";
 import {JiraIssueParams, JiraIssueResponse} from "../model/jira-issue";
 import {RecursivePartial} from "../model/common";
+import {IssueTypes} from "../enums/issue-types.enum";
 
 const headers = {
     Authorization: `Bearer ${ENV.jiraAccessToken}`,
@@ -8,40 +9,13 @@ const headers = {
     "Content-Type": "application/json"
 }
 
-// TODO merge with createSubTask
-export const createTask = async (title: string, description: string, assignee?: string) => {
+export const createIssue = async (type: IssueTypes, title: string, description: string, assignee?: string, parent?: string) => {
     const data: JiraIssueParams = {
         fields: {
             project: {key: ENV.jiraProject},
             summary: title,
             description: description,
-            issuetype: {name: "Task"},
-            labels: ["qe-task"],
-            components: [
-                {
-                    name: "QE-Task"
-                }
-            ]
-        }
-    }
-
-    if (assignee) {
-        data.fields.assignee = {name: assignee}
-    }
-
-    return doIssuePostRequest<JiraIssueResponse>(data);
-}
-
-export const createSubTask = async (parent: string, title: string, description: string, assignee?: string) => {
-    const data: JiraIssueParams = {
-        fields: {
-            project: {key: ENV.jiraProject},
-            summary: title,
-            description: description,
-            issuetype: {name: "Sub-task"},
-            parent: {
-                key: parent
-            },
+            issuetype: {name: type},
             labels: ["qe-task"],
             components: [
                 {
@@ -51,11 +25,15 @@ export const createSubTask = async (parent: string, title: string, description: 
         }
     };
 
+    if (parent) {
+        data.fields.parent = {key: parent}
+    }
+
     if (assignee) {
         data.fields.assignee = {name: assignee}
     }
 
-    return doIssuePostRequest(data);
+    return doIssuePostRequest<JiraIssueResponse>(data);
 }
 
 export const updateIssue = async (issueId: string, data: RecursivePartial<JiraIssueParams> ) => {

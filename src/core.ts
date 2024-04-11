@@ -1,9 +1,11 @@
-import {createSubTask, createTask, search, updateIssue} from "./requests/jira";
+import {createIssue, search, updateIssue} from "./requests/jira";
 import {getLaunchById, getLaunchFailedItems} from "./requests/report-portal";
 import {ReportPortalItem} from "./model/report-portal-item";
 import {Logger} from "./model/logger";
 import {Response} from "./model/response";
 import {OWNERS} from "../owners";
+import {launchToTaskDescription} from "./adapters/task.adapter";
+import {IssueTypes} from "./enums/issue-types.enum";
 
 export const main = async (id: number, logger?: Logger) => {
     if (!logger) {
@@ -73,10 +75,10 @@ export const main = async (id: number, logger?: Logger) => {
 
     let jiraTask = null;
     try {
-        jiraTask = await createTask(
+        jiraTask = await createIssue(
+            IssueTypes.Task,
             `[QE] Fix JF for Report Portal run ${launchId}`,
-            `Fix failures for RP Run ${launchResponse.content[0].number}\n ${launchResponse.content[0].description}`,
-            null
+            `Fix failures for RP Run ${launchResponse.content[0].number}\n ${launchResponse.content[0].description}`
         );
     } catch (e) {
         logger.error("Error while creating Jira Task");
@@ -88,15 +90,13 @@ export const main = async (id: number, logger?: Logger) => {
 
     try {
         for (let suite of Object.keys(itemsBySuite)) {
-            let description =  `RP Run #${launchResponse.content[0].number}\n${launchResponse.content[0].description}\n\n`;
-            description += itemsBySuite[suite].map(item => item.description).join('\n\n');
-            const res = await createSubTask(
-                jiraTask.key,
+            const res = await createIssue(
+                IssueTypes.Task,
                 `[QE] Fix JF for ${suite}`,
-                description,
-                findOwner(suite)
+                launchToTaskDescription(launchResponse.content[0], itemsBySuite[suite]),
+                findOwner(suite),
+                jiraTask.key
             );
-            console.log(res);
             await updateIssue((res as any).id, {fields: {customfield_12310243: 2}});
         }
         apiResponse.success = true;

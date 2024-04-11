@@ -1,5 +1,6 @@
 import {ENV} from "../../env";
 import {JiraIssueParams, JiraIssueResponse} from "../model/jira-issue";
+import {RecursivePartial} from "../model/common";
 
 const headers = {
     Authorization: `Bearer ${ENV.jiraAccessToken}`,
@@ -7,6 +8,7 @@ const headers = {
     "Content-Type": "application/json"
 }
 
+// TODO merge with createSubTask
 export const createTask = async (title: string, description: string, assignee?: string) => {
     const data: JiraIssueParams = {
         fields: {
@@ -27,7 +29,7 @@ export const createTask = async (title: string, description: string, assignee?: 
         data.fields.assignee = {name: assignee}
     }
 
-    return doPostRequest<JiraIssueResponse>(data);
+    return doIssuePostRequest<JiraIssueResponse>(data);
 }
 
 export const createSubTask = async (parent: string, title: string, description: string, assignee?: string) => {
@@ -36,7 +38,6 @@ export const createSubTask = async (parent: string, title: string, description: 
             project: {key: ENV.jiraProject},
             summary: title,
             description: description,
-            customfield_12310243: 2,
             issuetype: {name: "Sub-task"},
             parent: {
                 key: parent
@@ -54,8 +55,14 @@ export const createSubTask = async (parent: string, title: string, description: 
         data.fields.assignee = {name: assignee}
     }
 
-    return doPostRequest(data);
+    return doIssuePostRequest(data);
 }
+
+export const updateIssue = async (issueId: string, data: RecursivePartial<JiraIssueParams> ) => {
+    return doIssuePutRequest(data, issueId);
+}
+
+
 
 export const search = async (searchTerm: string) => {
     const response = await fetch(`${ENV.jiraApiUrl}/search?jql=project=MTA AND ${searchTerm}`, {
@@ -69,15 +76,32 @@ export const search = async (searchTerm: string) => {
 }
 
 // TODO type data param
-const doPostRequest = async <T>(data: any): Promise<T> => {
-    const response = await fetch(`${ENV.jiraApiUrl}/issue`, {
+const doIssuePostRequest = async <T>(data: any): Promise<T> => {
+    const response = await fetch(
+        `${ENV.jiraApiUrl}/issue`, {
         method: 'POST',
         headers,
         body: JSON.stringify(data)
     });
     if (response.status >= 400) {
-        throw new Error(`Status ${response.status} when creating Task wit error ${await response.text()}`);
+        throw new Error(`Status ${response.status} when creating or updating Issue wit error ${await response.text()}`);
     }
 
     return response.json();
+}
+
+// TODO type data param
+const doIssuePutRequest = async (data: any, issueId: string): Promise<string> => {
+
+    const response = await fetch(
+        `${ENV.jiraApiUrl}/issue/${issueId}`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(data)
+    });
+    if (response.status >= 400) {
+        throw new Error(`Status ${response.status} when creating or updating Issue wit error ${await response.text()}`);
+    }
+
+    return response.text();
 }

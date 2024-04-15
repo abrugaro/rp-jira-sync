@@ -62,7 +62,7 @@ export const main = async (id: number, logger?: Logger) => {
         launchFailedItems.content.forEach((item: any) => {
             const suiteName = item.pathNames.itemPaths[0].name
 
-            if (suiteName.toLowerCase().startsWith('bug') || item.description.toLowerCase().startsWith('bug')) {
+            if (suiteName.toLowerCase().startsWith('bug') || item.name.toLowerCase().startsWith('bug')) {
                 return true;
             }
 

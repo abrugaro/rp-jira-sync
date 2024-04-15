@@ -36,6 +36,7 @@ app.get('/:id', async (req: any, res: any) => {
         logger.error(e);
         apiResponse.data = logger.getLogs();
     } finally {
+        console.log(logger.getLogs());
         res.send(apiResponse);
     }
 

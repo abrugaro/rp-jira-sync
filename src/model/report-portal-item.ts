@@ -38,11 +38,10 @@ export interface Executions {
 }
 
 export interface Defects {
-    to_investigate: ToInvestigate
-}
-
-export interface ToInvestigate {
-    total: number
+    product_bug?: {total: number}
+    automation_bug?: {total: number}
+    to_investigate?: {total: number}
+    system_issue?: {total: number}
 }
 
 export interface PathNames {

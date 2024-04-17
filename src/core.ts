@@ -59,10 +59,10 @@ export const main = async (id: number, logger?: Logger) => {
     // Map failed items by their test suite
     const itemsBySuite: { [key: string]: ReportPortalItem[] } = {};
     try {
-        launchFailedItems.content.forEach((item: any) => {
+        launchFailedItems.content.forEach((item: ReportPortalItem) => {
             const suiteName = item.pathNames.itemPaths[0].name
 
-            if (suiteName.toLowerCase().startsWith('bug') || item.name.toLowerCase().startsWith('bug')) {
+            if (!shouldCreateTask(suiteName, item)) {
                 return true;
             }
 
@@ -124,4 +124,22 @@ export const findOwner = (suite: string) => {
     }
 
     return OWNERS[Object.keys(OWNERS).find(suiteName => suite.toLowerCase().includes(suiteName.toLowerCase()))];
+}
+
+export const shouldCreateTask = (suiteName: string, item: ReportPortalItem): boolean => {
+
+    // A task shouldn't be created if the suite or test is marked with a bug in its name
+    if (suiteName.toLowerCase().startsWith('bug') || item.name.toLowerCase().startsWith('bug')) {
+        return false;
+    }
+
+    if (
+        item.statistics.defects.product_bug &&
+        item.statistics.defects.product_bug.total > 0
+    ) {
+        return false;
+    }
+
+    return true;
+
 }

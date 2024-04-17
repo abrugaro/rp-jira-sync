@@ -1,4 +1,3 @@
-import {PolarionWorkItemResponse} from '../model/polarion-work-items';
 import {ENV} from "../../env";
 import {ReportPortalLaunch} from "../model/report-portal-launch";
 import {ReportPortalItem} from "../model/report-portal-item";

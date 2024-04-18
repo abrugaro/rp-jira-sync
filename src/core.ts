@@ -133,6 +133,7 @@ export const shouldCreateTask = (suiteName: string, item: ReportPortalItem): boo
         return false;
     }
 
+    // A task shouldn't be created if the suite or test is marked as a product bug in Report Portal
     if (
         item.statistics.defects.product_bug &&
         item.statistics.defects.product_bug.total > 0

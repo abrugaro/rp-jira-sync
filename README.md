@@ -12,6 +12,7 @@
 - [X] Create a DockerFile for the project
 - [X] Create JSON file to associate features to owners
 - [ ] Specify owners json file format in docs
+- [ ] Add user guide to README
 - [ ] Save logs to files for late debugging
 - [ ] Stream logs
 - [ ] Add item logs to the task description
@@ -20,6 +21,7 @@
 # Tech Debt
 
  - Create a good Logger class 
+ - Add prettier
  - Create an actually useful README
 
 # Install

@@ -87,6 +87,7 @@ export const main = async (id: number, queryParams: ParsedQs, logger?: Logger) =
       IssueTypes.Task,
       `[QE] Fix JF for Report Portal run ${launchId}`,
       `Fix failures for RP Run ${launchResponse.content[0].number}\n ${launchResponse.content[0].description}`,
+      null,
       parentIssue,
     )
   } catch (e) {

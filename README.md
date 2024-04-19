@@ -13,6 +13,7 @@
 - [x] Create an endpoint to trigger the execution
 - [x] Create a DockerFile for the project
 - [x] Create JSON file to associate features to owners
+- [ ] Add an env variable to map custom jira fields to usable names
 - [ ] Add husky with lint-stage to enforce linting
 - [ ] Merge owners file into env
 - [ ] Add user guide to README

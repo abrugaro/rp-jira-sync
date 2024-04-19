@@ -2,7 +2,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "node dist/bundle.js",
-    "lint": "npx eslint src/**/*"
+    "lint": "eslint src/**/*"
   },
   "dependencies": {
     "body-parser": "^1.20.2",

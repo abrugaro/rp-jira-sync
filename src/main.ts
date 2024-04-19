@@ -35,9 +35,9 @@ app.get("/:id", async (req: Request, res: any) => {
     logger.error("General error")
     logger.error(e)
     apiResponse.data = logger.getLogs()
+    res.send(apiResponse)
   } finally {
     console.log(logger.getLogs())
-    res.send(apiResponse)
   }
 })
 

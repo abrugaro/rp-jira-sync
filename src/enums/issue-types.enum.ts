@@ -1,4 +1,4 @@
 export enum IssueTypes {
-    Task = 'Task',
-    SubTask = 'Sub-task'
+  Task = "Task",
+  SubTask = "Sub-task",
 }

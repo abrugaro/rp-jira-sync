@@ -3,11 +3,12 @@ import { getLaunchById, getLaunchFailedItems } from "./requests/report-portal"
 import { ReportPortalItem } from "./model/report-portal-item"
 import { Logger } from "./model/logger"
 import { Response } from "./model/response"
-import { OWNERS } from "../owners"
 import { launchToTaskDescription } from "./adapters/task.adapter"
 import { IssueTypes } from "./enums/issue-types.enum"
+import { ParsedQs } from "qs"
+import { findOwner, shouldCreateTask } from "./common/utils"
 
-export const main = async (id: number, logger?: Logger) => {
+export const main = async (id: number, queryParams: ParsedQs, logger?: Logger) => {
   if (!logger) {
     logger = new Logger()
   }
@@ -79,11 +80,14 @@ export const main = async (id: number, logger?: Logger) => {
   }
 
   let jiraTask = null
+  let parentIssue = queryParams.parent ? queryParams.parent as string : null
+
   try {
     jiraTask = await createIssue(
       IssueTypes.Task,
       `[QE] Fix JF for Report Portal run ${launchId}`,
-      `Fix failures for RP Run ${launchResponse.content[0].number}\n ${launchResponse.content[0].description}`
+      `Fix failures for RP Run ${launchResponse.content[0].number}\n ${launchResponse.content[0].description}`,
+      parentIssue,
     )
   } catch (e) {
     logger.error("Error while creating Jira Task")
@@ -99,7 +103,7 @@ export const main = async (id: number, logger?: Logger) => {
         `[QE] Fix JF for ${suite}`,
         launchToTaskDescription(launchResponse.content[0], itemsBySuite[suite]),
         findOwner(suite),
-        jiraTask.key
+        jiraTask.key,
       )
       await updateIssue((res as any).id, {
         fields: { customfield_12310243: 2 },
@@ -117,38 +121,3 @@ export const main = async (id: number, logger?: Logger) => {
   }
 }
 
-export const findOwner = (suite: string) => {
-  const owner = OWNERS[suite]
-  if (owner) {
-    return owner
-  }
-
-  return OWNERS[
-    Object.keys(OWNERS).find((suiteName) =>
-      suite.toLowerCase().includes(suiteName.toLowerCase())
-    )
-  ]
-}
-
-export const shouldCreateTask = (
-  suiteName: string,
-  item: ReportPortalItem
-): boolean => {
-  // A task shouldn't be created if the suite or test is marked with a bug in its name
-  if (
-    suiteName.toLowerCase().startsWith("bug") ||
-    item.name.toLowerCase().startsWith("bug")
-  ) {
-    return false
-  }
-
-  // A task shouldn't be created if the suite or test is marked as a product bug in Report Portal
-  if (
-    item.statistics.defects.product_bug &&
-    item.statistics.defects.product_bug.total > 0
-  ) {
-    return false
-  }
-
-  return true
-}

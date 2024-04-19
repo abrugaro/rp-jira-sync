@@ -1,3 +1,6 @@
+
+# Usage 
+
 # Roadmap
 
 - [x] Get last launch and/or by id
@@ -10,10 +13,11 @@
 - [x] Create an endpoint to trigger the execution
 - [x] Create a DockerFile for the project
 - [x] Create JSON file to associate features to owners
-- [ ] Specify owners json file format in docs
+- [ ] Add husky with lint-stage to enforce linting
+- [ ] Merge owners file into env
 - [ ] Add user guide to README
-- [ ] Save logs to files for late debugging
-- [ ] Stream logs
+- [ ] Add time mark to logs
+- [ ] Specify owners json file format in docs
 - [ ] Add item logs to the task description
 - [ ] Filter tests that are affected by bugs to avoid creating tasks
 

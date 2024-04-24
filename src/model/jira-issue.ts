@@ -10,6 +10,7 @@ export interface JiraIssueParams {
     summary: string
     description: string
     customfield_12310243?: number // Story Points
+    customfield_12311140?: string // Epic Link
     issuetype: { name: string }
     parent?: { key: string }
     labels: string[]

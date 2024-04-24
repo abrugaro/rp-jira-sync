@@ -1,3 +1,36 @@
+
+# Usage
+
+## Creating Jira Tickets from Report Portal Launches
+Once the project has been deployed, you can create Jira tickets from a launch in Report Portal. To do this, make a request to the base URL where the project is deployed, appending the ID of the launch for which you want to create tasks.
+
+**Basic Example:**
+
+```
+https://url-to-the-tool/{launch_id}
+```
+Where `{launch_id}` is replaced by the actual launch ID.
+
+For example, here, 1234 is the ID of the launch.:
+```
+https://url-to-the-tool/1234
+```
+
+## Creating a Task under a Specific Epic
+If you want to create the task under a specific epic, you can specify a query parameter epic with the code of the desired epic.
+
+**Example with Epic:**
+
+```
+https://url-to-the-tool/{launch_id}?epic={epic_code}
+```
+Where `{epic_code}` is replaced by the actual Epic code.
+
+For example, here, XX-11 is the code of the epic.:
+```
+https://url-to-the-tool/1234?epic=XX-11
+```
+
 # Roadmap
 
 - [x] Get last launch and/or by id
@@ -10,10 +43,12 @@
 - [x] Create an endpoint to trigger the execution
 - [x] Create a DockerFile for the project
 - [x] Create JSON file to associate features to owners
+- [x] Add user guide to README
+- [ ] Add an env variable to map custom jira fields to usable names
+- [ ] Add husky with lint-stage to enforce linting
+- [ ] Merge owners file into env
+- [ ] Add time mark to logs
 - [ ] Specify owners json file format in docs
-- [ ] Add user guide to README
-- [ ] Save logs to files for late debugging
-- [ ] Stream logs
 - [ ] Add item logs to the task description
 - [ ] Filter tests that are affected by bugs to avoid creating tasks
 

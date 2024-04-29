@@ -9,7 +9,7 @@ import { Logger } from "./model/logger";
 import { Response } from "./model/response";
 import { launchToTaskDescription } from "./adapters/task.adapter";
 import { ParsedQs } from "qs";
-import { findOwner, shouldCreateTask } from "./common/utils";
+import { findOwner, isMarkedAsProductBug, shouldCreateTask } from "./common/utils";
 import { JiraIssueTypes } from "./enums/jira-issue-types.enum";
 import { RpIssueTypes } from "./enums/rp-issue-types";
 
@@ -67,7 +67,7 @@ export const main = async (
     launchFailedItems.content.forEach((item: ReportPortalItem) => {
       const suiteName = item.pathNames.itemPaths[0].name;
 
-      if (item.name.toLowerCase().startsWith("bug")) {
+      if (item.name.toLowerCase().startsWith("bug") && !isMarkedAsProductBug(item)) {
         updateIssueType(item.id, RpIssueTypes.ProductBug);
         logger.info(`Mark ${item.id}: ${item.name} as PB in RP`);
       }

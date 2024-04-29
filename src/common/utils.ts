@@ -36,13 +36,11 @@ export const shouldCreateTask = (
     return false
   }
 
-  // A task shouldn't be created if the suite or test is marked as a product bug in Report Portal
-  if (
-    item.statistics.defects.product_bug &&
-    item.statistics.defects.product_bug.total > 0
-  ) {
-    return false
-  }
+  // A task shouldn't be created if the suite or test is marked as a product bug in Report Porta
+  return isMarkedAsProductBug(item);
+}
 
-  return true
+export const isMarkedAsProductBug = (item: ReportPortalItem) => {
+  return item.statistics.defects.product_bug &&
+    item.statistics.defects.product_bug.total > 0;
 }

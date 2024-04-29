@@ -37,7 +37,7 @@ export const shouldCreateTask = (
   }
 
   // A task shouldn't be created if the suite or test is marked as a product bug in Report Porta
-  return isMarkedAsProductBug(item);
+  return !isMarkedAsProductBug(item);
 }
 
 export const isMarkedAsProductBug = (item: ReportPortalItem) => {

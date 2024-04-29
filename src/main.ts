@@ -30,6 +30,7 @@ app.get("/:id", async (req: Request, res: any) => {
 
   try {
     const result = await main(+id, req.query, logger)
+    result.data = logger.getLogs();
     res.send(result)
   } catch (e) {
     logger.error("General error")

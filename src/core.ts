@@ -1,12 +1,17 @@
 import { createIssue, search, updateIssue } from "./requests/jira";
-import { getLaunchById, getLaunchFailedItems } from "./requests/report-portal";
+import {
+  getLaunchById,
+  getLaunchFailedItems,
+  updateIssueType,
+} from "./requests/report-portal";
 import { ReportPortalItem } from "./model/report-portal-item";
 import { Logger } from "./model/logger";
 import { Response } from "./model/response";
 import { launchToTaskDescription } from "./adapters/task.adapter";
-import { IssueTypes } from "./enums/issue-types.enum";
 import { ParsedQs } from "qs";
 import { findOwner, shouldCreateTask } from "./common/utils";
+import { JiraIssueTypes } from "./enums/jira-issue-types.enum";
+import { RpIssueTypes } from "./enums/rp-issue-types";
 
 export const main = async (
   id: number,
@@ -27,12 +32,10 @@ export const main = async (
     const searchResult = await search(`summary ~ ${id}`);
     if (searchResult.total > 0) {
       logger.debug(`A task already exists for run ${id}`);
-      apiResponse.data = logger.getLogs();
       return apiResponse;
     }
   } catch (e) {
     logger.error(e);
-    apiResponse.data = logger.getLogs();
     return apiResponse;
   }
 
@@ -41,7 +44,6 @@ export const main = async (
   logger.debug(launchResponse);
   if (!launchResponse.content || !launchResponse.content[0]) {
     logger.error("Launch Response error");
-    apiResponse.data = logger.getLogs();
     return apiResponse;
   }
   const launchId = launchResponse.content[0].id;
@@ -51,13 +53,11 @@ export const main = async (
   logger.debug(launchFailedItems);
   if (!launchFailedItems) {
     logger.error("Launch Failed items error response");
-    apiResponse.data = logger.getLogs();
     return apiResponse;
   }
 
   if (!launchFailedItems.content.length) {
     logger.info("No failed items found");
-    apiResponse.data = logger.getLogs();
     return apiResponse;
   }
 
@@ -66,6 +66,11 @@ export const main = async (
   try {
     launchFailedItems.content.forEach((item: ReportPortalItem) => {
       const suiteName = item.pathNames.itemPaths[0].name;
+
+      if (item.name.toLowerCase().startsWith("bug")) {
+        updateIssueType(item.id, RpIssueTypes.ProductBug);
+        logger.info(`Mark ${item.id}: ${item.name} as PB in RP`);
+      }
 
       if (!shouldCreateTask(suiteName, item)) {
         return true;
@@ -79,15 +84,13 @@ export const main = async (
   } catch (e) {
     logger.error("Error while mapping suites");
     logger.error(e);
-    apiResponse.data = logger.getLogs();
     return apiResponse;
   }
 
   let jiraTask = null;
-
   try {
     jiraTask = await createIssue(
-      IssueTypes.Task,
+      JiraIssueTypes.Task,
       `[QE] Fix JF for Report Portal run ${launchId}`,
       `Fix failures for RP Run ${launchResponse.content[0].number}\n ${launchResponse.content[0].description}`
     );
@@ -97,18 +100,16 @@ export const main = async (
         fields: { customfield_12311140: queryParams.epic as string },
       });
     }
-
   } catch (e) {
     logger.error("Error while creating or updating Jira Task");
     logger.error(e);
-    apiResponse.data = logger.getLogs();
     return apiResponse;
   }
 
   try {
     for (let suite of Object.keys(itemsBySuite)) {
       const res = await createIssue(
-        IssueTypes.SubTask,
+        JiraIssueTypes.SubTask,
         `[QE] Fix JF for ${suite}`,
         launchToTaskDescription(launchResponse.content[0], itemsBySuite[suite]),
         findOwner(suite),
@@ -120,12 +121,10 @@ export const main = async (
     }
     apiResponse.success = true;
     apiResponse.message = "Ok";
-    apiResponse.data = logger.getLogs();
     return apiResponse;
   } catch (e) {
     logger.error("Error while creating Jira SubTasks");
     logger.error(e);
-    apiResponse.data = logger.getLogs();
     return apiResponse;
   }
 };

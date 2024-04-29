@@ -1,4 +1,4 @@
-export enum IssueTypes {
+export enum JiraIssueTypes {
   Task = "Task",
   SubTask = "Sub-task",
 }

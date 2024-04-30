@@ -1,3 +1,3 @@
 export enum RpIssueTypes {
-  ProductBug = 'PB001'
+  ProductBug = "PB001",
 }

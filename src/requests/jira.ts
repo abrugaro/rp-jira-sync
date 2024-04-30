@@ -1,7 +1,7 @@
 import { ENV } from "../../env";
 import { JiraIssueParams, JiraIssueResponse } from "../model/jira-issue";
 import { RecursivePartial } from "../model/common";
-import { IssueTypes } from "../enums/issue-types.enum";
+import { JiraIssueTypes } from "../enums/jira-issue-types.enum";
 
 const headers = {
   Authorization: `Bearer ${ENV.jiraAccessToken}`,
@@ -10,7 +10,7 @@ const headers = {
 };
 
 export const createIssue = async (
-  type: IssueTypes,
+  type: JiraIssueTypes,
   title: string,
   description: string,
   assignee?: string,

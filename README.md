@@ -1,7 +1,7 @@
-
 # Usage
 
 ## Creating Jira Tickets from Report Portal Launches
+
 Once the project has been deployed, you can create Jira tickets from a launch in Report Portal. To do this, make a request to the base URL where the project is deployed, appending the ID of the launch for which you want to create tasks.
 
 **Basic Example:**
@@ -9,14 +9,17 @@ Once the project has been deployed, you can create Jira tickets from a launch in
 ```
 https://url-to-the-tool/{launch_id}
 ```
+
 Where `{launch_id}` is replaced by the actual launch ID.
 
 For example, here, 1234 is the ID of the launch.:
+
 ```
 https://url-to-the-tool/1234
 ```
 
 ## Creating a Task under a Specific Epic
+
 If you want to create the task under a specific epic, you can specify a query parameter epic with the code of the desired epic.
 
 **Example with Epic:**
@@ -24,9 +27,11 @@ If you want to create the task under a specific epic, you can specify a query pa
 ```
 https://url-to-the-tool/{launch_id}?epic={epic_code}
 ```
+
 Where `{epic_code}` is replaced by the actual Epic code.
 
 For example, here, XX-11 is the code of the epic.:
+
 ```
 https://url-to-the-tool/1234?epic=XX-11
 ```

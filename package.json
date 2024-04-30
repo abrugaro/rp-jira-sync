@@ -2,7 +2,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "node dist/bundle.js",
-    "lint": "eslint src/**/*"
+    "lint": "eslint src/**/*",
+    "prettier:fix": "prettier --write src README.md"
   },
   "dependencies": {
     "body-parser": "^1.20.2",

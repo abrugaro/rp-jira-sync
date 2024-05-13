@@ -42,7 +42,7 @@ export const createIssue = async (
   return doIssuePostRequest<JiraIssueResponse>(data);
 };
 
-export const getIssue = async (issueKey: string) => {
+export const getIssue = async (issueKey: string): Promise<JiraIssueResponse> => {
   const response = await fetch(
     `${ENV.jiraApiUrl}/issue/${issueKey}`,
     {

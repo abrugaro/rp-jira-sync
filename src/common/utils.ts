@@ -54,7 +54,7 @@ export const isBugVerified = async (suiteOrTestName: string) => {
   }
 
   const issue = await getIssue(bugId);
-  return issue.status.name.toLowerCase() === "verified";
+  return issue.fields.status.name.toLowerCase() === "verified";
 };
 
 export const isMarkedAsProductBugInRP = (item: ReportPortalItem) => {

@@ -15,9 +15,9 @@ export const findOwner = (suite: string) => {
 
   return OWNERS[
     Object.keys(OWNERS).find((suiteName) =>
-      suite.toLowerCase().includes(suiteName.toLowerCase())
+      suite.toLowerCase().includes(suiteName.toLowerCase()),
     )
-  ];
+    ];
 };
 
 /**
@@ -26,38 +26,39 @@ export const findOwner = (suite: string) => {
  * @param item
  * @return boolean
  */
-export const shouldCreateTask = (
+export const shouldCreateTask = async (
   suiteName: string,
-  item: ReportPortalItem
-): boolean => {
-  // A task shouldn't be created if the suite or test is marked with a bug in its name
-  if (
-    suiteName.toLowerCase().startsWith("bug") ||
-    item.name.toLowerCase().startsWith("bug")
-  ) {
+  item: ReportPortalItem,
+): Promise<boolean> => {
+  // A task shouldn't be created if the suite or test is marked with a bug that is not verified in its name
+  if (suiteName.toLowerCase().startsWith("bug") && !(await isBugVerified(suiteName))) {
     return false;
   }
 
-  // A task shouldn't be created if the suite or test is marked as a product bug in Report Porta
-  return !isMarkedAsProductBug(item);
+  if (item.name.toLowerCase().startsWith("bug") && !(await isBugVerified(item.name))) {
+    return false;
+  }
+
+  // A task shouldn't be created if the suite or test is marked as a product bug in Report Portal
+  return !isMarkedAsProductBugInRP(item);
 };
 
-export const isMarkedAsProductBug = async (item: ReportPortalItem) => {
-  if (
-    item.statistics.defects.product_bug &&
-    item.statistics.defects.product_bug.total > 0
-  ) {
-    const bugId = getBugIdFromTestName(item.name);
-    if (!bugId) {
-      return false;
-    }
-
-    const issue = await getIssue(bugId);
-    if (issue.status.name.toLowerCase() !== "verified") {
-      return true;
-    }
+/**
+ *
+ * @param suiteOrTestName
+ */
+export const isBugVerified = async (suiteOrTestName: string) => {
+  const bugId = getBugIdFromTestName(suiteOrTestName);
+  if (!bugId) {
+    return false;
   }
-  return false;
+
+  const issue = await getIssue(bugId);
+  return issue.status.name.toLowerCase() === "verified";
+};
+
+export const isMarkedAsProductBugInRP = (item: ReportPortalItem) => {
+  return item.statistics.defects.product_bug && item.statistics.defects.product_bug.total > 0;
 };
 
 /**

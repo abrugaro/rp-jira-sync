@@ -15,9 +15,9 @@ export const findOwner = (suite: string) => {
 
   return OWNERS[
     Object.keys(OWNERS).find((suiteName) =>
-      suite.toLowerCase().includes(suiteName.toLowerCase()),
+      suite.toLowerCase().includes(suiteName.toLowerCase())
     )
-    ];
+  ];
 };
 
 /**
@@ -28,14 +28,20 @@ export const findOwner = (suite: string) => {
  */
 export const shouldCreateTask = async (
   suiteName: string,
-  item: ReportPortalItem,
+  item: ReportPortalItem
 ): Promise<boolean> => {
   // A task shouldn't be created if the suite or test is marked with a bug that is not verified in its name
-  if (suiteName.toLowerCase().startsWith("bug") && !(await isBugVerified(suiteName))) {
+  if (
+    suiteName.toLowerCase().startsWith("bug") &&
+    !(await isBugVerified(suiteName))
+  ) {
     return false;
   }
 
-  if (item.name.toLowerCase().startsWith("bug") && !(await isBugVerified(item.name))) {
+  if (
+    item.name.toLowerCase().startsWith("bug") &&
+    !(await isBugVerified(item.name))
+  ) {
     return false;
   }
 
@@ -49,8 +55,14 @@ export const shouldCreateTask = async (
  */
 export const isBugVerified = async (suiteOrTestName: string) => {
   const bugId = getBugIdFromTestName(suiteOrTestName);
+
   if (!bugId) {
-    return false;
+    /**
+     * If the bug can't be extracted from the test name, it means that
+     * it is not written in the correct format
+     * TODO: Check if this can be improved
+     */
+    return true;
   }
 
   const issue = await getIssue(bugId);
@@ -58,7 +70,10 @@ export const isBugVerified = async (suiteOrTestName: string) => {
 };
 
 export const isMarkedAsProductBugInRP = (item: ReportPortalItem) => {
-  return item.statistics.defects.product_bug && item.statistics.defects.product_bug.total > 0;
+  return (
+    item.statistics.defects.product_bug &&
+    item.statistics.defects.product_bug.total > 0
+  );
 };
 
 /**
@@ -72,7 +87,7 @@ export function getBugIdFromTestName(testName: string): string {
     return null;
   }
 
-  const id = first[0].split(" ")[1];
+  const id = first.split(" ")[1];
 
   return id ?? null;
 }

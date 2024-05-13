@@ -47,10 +47,15 @@ export const isMarkedAsProductBug = async (item: ReportPortalItem) => {
     item.statistics.defects.product_bug &&
     item.statistics.defects.product_bug.total > 0
   ) {
-    const issue = await getIssue(item.name);
-    if (issue.status.name.toLowerCase() !== "verified") {
-      return true;
+    try {
+      const issue = await getIssue(getBugLinkFromTestName(item.name));
+      if (issue.status.name.toLowerCase() !== "verified") {
+        return true;
+      }
+    } catch (e) {
+      throw e;
     }
+
   }
   return false;
 };

@@ -76,7 +76,7 @@ export const main = async (
 
       if (
         item.name.toLowerCase().startsWith("bug") &&
-        !(await isBugVerified(suiteName)) &&
+        !(await isBugVerified(item.name)) &&
         !isMarkedAsProductBugInRP(item)
       ) {
         const bugId = getBugIdFromTestName(item.name);

@@ -42,6 +42,22 @@ export const createIssue = async (
   return doIssuePostRequest<JiraIssueResponse>(data);
 };
 
+export const getIssue = async (issueKey: string) => {
+  const response = await fetch(
+    `${ENV.jiraApiUrl}/issue/${issueKey}`,
+    {
+      headers,
+    }
+  );
+  if (response.status >= 400) {
+    throw new Error(
+      `Status ${response.status} when getting issue ${issueKey} wit error ${await response.text()}`
+    );
+  }
+
+  return response.json();
+}
+
 export const updateIssue = async (
   issueId: string,
   data: RecursivePartial<JiraIssueParams>

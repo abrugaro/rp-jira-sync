@@ -10,7 +10,7 @@ import { Response } from "./model/response";
 import { launchToTaskDescription } from "./adapters/task.adapter";
 import { ParsedQs } from "qs";
 import {
-  findOwner,
+  findOwner, getBugLinkFromTestName,
   isMarkedAsProductBug,
   shouldCreateTask,
 } from "./common/utils";
@@ -75,7 +75,7 @@ export const main = async (
         item.name.toLowerCase().startsWith("bug") &&
         !isMarkedAsProductBug(item)
       ) {
-        updateIssueType(item.id, RpIssueTypes.ProductBug);
+        updateIssueType(item.id, RpIssueTypes.ProductBug, getBugLinkFromTestName(item.name));
         logger.info(`Mark ${item.id}: ${item.name} as PB in RP`);
       }
 

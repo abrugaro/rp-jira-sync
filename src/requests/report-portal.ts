@@ -59,7 +59,7 @@ export const getLaunchItemLogs = (launchId: number) => {
   );
 };
 
-export const updateIssueType = (itemId: number, issueType: RpIssueTypes) => {
+export const updateIssueType = (itemId: number, issueType: RpIssueTypes, comments?: string) => {
   const url = `${ENV.reportPortalApiUrl}/${ENV.reportPortalProject}/item`;
   const data = {
     issues: [
@@ -68,7 +68,7 @@ export const updateIssueType = (itemId: number, issueType: RpIssueTypes) => {
         testItemId: itemId,
         issue: {
           issueType: issueType,
-          comment: "Automatically analyzed by RPJ",
+          comment: `Automatically analyzed by RPJ\n${comments}`,
         },
       },
     ],

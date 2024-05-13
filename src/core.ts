@@ -10,12 +10,14 @@ import { Response } from "./model/response";
 import { launchToTaskDescription } from "./adapters/task.adapter";
 import { ParsedQs } from "qs";
 import {
-  findOwner, getBugLinkFromTestName,
+  findOwner,
+  getBugIdFromTestName,
   isMarkedAsProductBug,
   shouldCreateTask,
 } from "./common/utils";
 import { JiraIssueTypes } from "./enums/jira-issue-types.enum";
 import { RpIssueTypes } from "./enums/rp-issue-types";
+import { issueKeyToBrowseLink } from "./adapters/urls.adapter";
 
 export const main = async (
   id: number,
@@ -75,7 +77,11 @@ export const main = async (
         item.name.toLowerCase().startsWith("bug") &&
         !isMarkedAsProductBug(item)
       ) {
-        updateIssueType(item.id, RpIssueTypes.ProductBug, getBugLinkFromTestName(item.name));
+        updateIssueType(
+          item.id,
+          RpIssueTypes.ProductBug,
+          issueKeyToBrowseLink(getBugIdFromTestName(item.name))
+        );
         logger.info(`Mark ${item.id}: ${item.name} as PB in RP`);
       }
 

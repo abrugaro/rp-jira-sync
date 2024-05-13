@@ -48,7 +48,12 @@ export const isMarkedAsProductBug = async (item: ReportPortalItem) => {
     item.statistics.defects.product_bug.total > 0
   ) {
     try {
-      const issue = await getIssue(getBugLinkFromTestName(item.name));
+      const bugId = getBugIdFromTestName(item.name);
+      if (!bugId) {
+        return false;
+      }
+
+      const issue = await getIssue(bugId);
       if (issue.status.name.toLowerCase() !== "verified") {
         return true;
       }
@@ -65,16 +70,13 @@ export const isMarkedAsProductBug = async (item: ReportPortalItem) => {
  * This method assumess that the bug is marked in the test name as "Bug XXXX: Test name"
  * @param testName
  */
-export function getBugLinkFromTestName(testName: string): string {
+export function getBugIdFromTestName(testName: string): string {
   const first = testName.split(":")[0];
   if (!first) {
     return null;
   }
 
   const id = first[0].split(" ")[1];
-  if (!id) {
-    return null;
-  }
 
-  return `${ENV.jiraApiUrl.split("/rest")[0]}/browse/${id}`;
+  return id ?? null
 }

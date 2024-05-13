@@ -47,20 +47,15 @@ export const isMarkedAsProductBug = async (item: ReportPortalItem) => {
     item.statistics.defects.product_bug &&
     item.statistics.defects.product_bug.total > 0
   ) {
-    try {
-      const bugId = getBugIdFromTestName(item.name);
-      if (!bugId) {
-        return false;
-      }
-
-      const issue = await getIssue(bugId);
-      if (issue.status.name.toLowerCase() !== "verified") {
-        return true;
-      }
-    } catch (e) {
-      throw e;
+    const bugId = getBugIdFromTestName(item.name);
+    if (!bugId) {
+      return false;
     }
 
+    const issue = await getIssue(bugId);
+    if (issue.status.name.toLowerCase() !== "verified") {
+      return true;
+    }
   }
   return false;
 };
@@ -78,5 +73,5 @@ export function getBugIdFromTestName(testName: string): string {
 
   const id = first[0].split(" ")[1];
 
-  return id ?? null
+  return id ?? null;
 }

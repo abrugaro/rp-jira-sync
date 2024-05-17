@@ -18,7 +18,8 @@ export function launchToTaskDescription(
         *RP Run #${launch.number}*\n *Jenkins:* ${launch.description}\n\n
         *Launch Attributes*\n
         ||${attrKeys}|
-        |${attrValues}|
+        |${attrValues}|\n
+        *Failures:*
     `;
   description += suiteItems.map((item) => item.description).join("\n");
 

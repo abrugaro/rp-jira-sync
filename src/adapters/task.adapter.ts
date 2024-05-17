@@ -17,7 +17,7 @@ export function launchToTaskDescription(
   let description = `*RP Suite errors URL (Please, analyze the failures in RP using the following link):* ${rpUrl}\n\n----\n\n
         *RP Run #${launch.number}*\n *Jenkins:* ${launch.description}\n\n
         *Launch Attributes*\n
-        ||${attrKeys}|\n
+        ||${attrKeys}|
         |${attrValues}|
     `;
   description += suiteItems.map((item) => item.description).join("\n");

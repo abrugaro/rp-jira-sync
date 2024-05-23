@@ -11,11 +11,14 @@ import { launchToTaskDescription } from "./adapters/task.adapter";
 import { ParsedQs } from "qs";
 import {
   findOwner,
-  isMarkedAsProductBug,
+  getBugIdFromTestName,
+  isBugVerified,
+  isMarkedAsProductBugInRP,
   shouldCreateTask,
 } from "./common/utils";
 import { JiraIssueTypes } from "./enums/jira-issue-types.enum";
 import { RpIssueTypes } from "./enums/rp-issue-types";
+import { issueKeyToBrowseLink } from "./adapters/urls.adapter";
 
 export const main = async (
   id: number,
@@ -68,26 +71,30 @@ export const main = async (
   // Map failed items by their test suite
   const itemsBySuite: { [key: string]: ReportPortalItem[] } = {};
   try {
-    launchFailedItems.content.forEach((item: ReportPortalItem) => {
+    for (const item of launchFailedItems.content) {
       const suiteName = item.pathNames.itemPaths[0].name;
 
       if (
         item.name.toLowerCase().startsWith("bug") &&
-        !isMarkedAsProductBug(item)
+        !(await isBugVerified(item.name)) &&
+        !isMarkedAsProductBugInRP(item)
       ) {
-        updateIssueType(item.id, RpIssueTypes.ProductBug);
+        const bugId = getBugIdFromTestName(item.name);
+        const bugLink = bugId ? issueKeyToBrowseLink(bugId) : "";
+
+        updateIssueType(item.id, RpIssueTypes.ProductBug, bugLink);
         logger.info(`Mark ${item.id}: ${item.name} as PB in RP`);
       }
 
-      if (!shouldCreateTask(suiteName, item)) {
-        return true;
+      if (!(await shouldCreateTask(suiteName, item))) {
+        continue;
       }
 
       if (!itemsBySuite[suiteName]) {
         itemsBySuite[suiteName] = [];
       }
       itemsBySuite[suiteName].push(item);
-    });
+    }
   } catch (e) {
     logger.error("Error while mapping suites");
     logger.error(e);

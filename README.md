@@ -46,21 +46,21 @@ flowchart TD
     B --> |No| C
     C[Get launch data] --> D
     D[Get next item] --> E
-    E{fa:fa-r fa:fa-p - Item is marked as PB &&\nfa:fa-j - Bug is not verified in Jira &&\nPB is not market in RP}
+    E{RP - Item is marked as PB &&\nJ - Bug is not verified in Jira &&\nPB is not market in RP}
     E --> |No| D
     E --> |Yes| F
-    F[fa:fa-r fa:fa-p - Mark item as PB in RP] --> G
-    G{Suite or test marked as a bug in its name &&\n fa:fa-j - Bug not verified in Jira &&\nPB not marked in RP}
+    F[RP - Mark item as PB in RP] --> G
+    G{Suite or test marked as a bug in its name &&\n J - Bug not verified in Jira &&\nPB not marked in RP}
     G --> |No| C
     G --> |Yes| H
-    H[fa:fa-j - Create Task For the RP run] --> I
+    H[J - Create Task For the RP run] --> I
     I{Epic key provided} 
-    I --> |Yes| J[fa:fa-j - Update Task to set Epic] --> K
+    I --> |Yes| J[J - Update Task to set Epic] --> K
     I --> |No| K
-    K[fa:fa-j - Create Subtask Task for each suite in Jira\nContaining all the failed tests of that suite] --> L
-    L[fa:fa-j - Update subtasks to set SP] --> Z
+    K[J - Create Subtask Task for each suite in Jira\nContaining all the failed tests of that suite] --> L
+    L[J - Update subtasks to set SP] --> Z
     Z(END)
-    X[fa:fa-r fa:fa-p -> HTTP Request to Report Portal API\n fa:fa-j -> HTTP Request to Jira API]
+    X[RP - HTTP Request to Report Portal API\n J - HTTP Request to Jira API]
 ```
 </details>
 

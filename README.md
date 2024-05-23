@@ -40,26 +40,26 @@ https://url-to-the-tool/1234?epic=XX-11
 
 ```mermaid
 flowchart TD
-    A[Run RPJ providing the RP launch id\nOptional: Provide Jira Epic key] --> B
-    B{Task for that launch\n already exists}
-    B --> |Yes| Z
-    B --> |No| C
-    C[Get launch data] --> D
-    D[Get next item] --> E
-    E{RP - Item is marked as PB &&\nJ - Bug is not verified in Jira &&\nPB is not market in RP}
-    E --> |No| D
-    E --> |Yes| F
-    F[RP - Mark item as PB in RP] --> G
-    G{Suite or test marked as a bug in its name &&\n J - Bug not verified in Jira &&\nPB not marked in RP}
-    G --> |No| C
-    G --> |Yes| H
-    H[J - Create Task For the RP run] --> I
-    I{Epic key provided} 
-    I --> |Yes| J[J - Update Task to set Epic] --> K
-    I --> |No| K
-    K[J - Create Subtask Task for each suite in Jira\nContaining all the failed tests of that suite] --> L
-    L[J - Update subtasks to set SP] --> Z
-    Z(END)
+   A[Run RPJ providing the RP launch id\nOptional: Provide Jira Epic key] --> B
+   B{Task for that launch already exists}
+   B --> |Yes| Z
+   B --> |No| C
+   C[Get launch data] --> D
+   D[Get next item] --> E
+   E{RP - Item is marked as PB &&\nJ - Bug is not verified in Jira &&\nPB is not marked in RP}
+   E --> |No| D
+   E --> |Yes| F
+   F[RP - Mark item as PB in RP] --> G
+   G{Suite or test marked as a bug in its name &&\nJ - Bug not verified in Jira &&\nPB not marked in RP}
+   G --> |No| C
+   G --> |Yes| H
+   H[J - Create Task For the RP run] --> I
+   I{Epic key provided}
+   I --> |Yes| J[J - Update Task to set Epic] --> K
+   I --> |No| K
+   K[J - Create Subtask Task for each suite in Jira\nContaining all the failed tests of that suite] --> L
+   L[J - Update subtasks to set SP] --> Z
+   Z[END]
 ```
 </details>
 

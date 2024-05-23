@@ -40,6 +40,7 @@ https://url-to-the-tool/1234?epic=XX-11
 
 ```mermaid
 flowchart TD
+   Z[END]
    A[Run RPJ providing the RP launch id\nOptional: Provide Jira Epic key] --> B
    B{Task for that launch already exists}
    B --> |Yes| Z
@@ -59,7 +60,6 @@ flowchart TD
    I --> |No| K
    K[J - Create Subtask Task for each suite in Jira\nContaining all the failed tests of that suite] --> L
    L[J - Update subtasks to set SP] --> Z
-   Z[END]
 ```
 </details>
 

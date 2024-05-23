@@ -60,7 +60,6 @@ flowchart TD
     K[J - Create Subtask Task for each suite in Jira\nContaining all the failed tests of that suite] --> L
     L[J - Update subtasks to set SP] --> Z
     Z(END)
-    X[RP - HTTP Request to Report Portal API\n J - HTTP Request to Jira API]
 ```
 </details>
 

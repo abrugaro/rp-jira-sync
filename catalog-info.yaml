@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: RPJ - Report Portal to Jira Tool
+  name: RPJ-Report_Portal_to_Jira_Tool
   description: |
     Automatic Synchronization between Report Portal and Jira.
     Create tasks and subtasks from test suites failures in Report Portal Launchs

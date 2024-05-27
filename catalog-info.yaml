@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: RPJ - Report Portal to Jira Tool
+  description: |
+    Automatic Synchronization between Report Portal and Jira.
+    Create tasks and subtasks from test suites failures in Report Portal Launchs
+  annotations:
+    github.com/project-slug: abrugaro/rp-jira-sync
+spec:
+  type: library
+  lifecycle: experimental

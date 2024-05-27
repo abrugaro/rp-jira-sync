@@ -8,5 +8,6 @@ metadata:
   annotations:
     github.com/project-slug: abrugaro/rp-jira-sync
 spec:
+  owner: abrugaro
   type: library
   lifecycle: experimental

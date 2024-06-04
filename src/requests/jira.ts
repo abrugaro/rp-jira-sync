@@ -42,13 +42,12 @@ export const createIssue = async (
   return doIssuePostRequest<JiraIssueResponse>(data);
 };
 
-export const getIssue = async (issueKey: string): Promise<JiraIssueResponse> => {
-  const response = await fetch(
-    `${ENV.jiraApiUrl}/issue/${issueKey}`,
-    {
-      headers,
-    }
-  );
+export const getIssue = async (
+  issueKey: string
+): Promise<JiraIssueResponse> => {
+  const response = await fetch(`${ENV.jiraApiUrl}/issue/${issueKey}`, {
+    headers,
+  });
   if (response.status >= 400) {
     throw new Error(
       `Status ${response.status} when getting issue ${issueKey} wit error ${await response.text()}`
@@ -56,7 +55,7 @@ export const getIssue = async (issueKey: string): Promise<JiraIssueResponse> => 
   }
 
   return response.json();
-}
+};
 
 export const updateIssue = async (
   issueId: string,

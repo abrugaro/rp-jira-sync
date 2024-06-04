@@ -5,29 +5,22 @@ import {
   updateIssueType,
 } from "./requests/report-portal";
 import { ReportPortalItem } from "./model/report-portal-item";
-import { Logger } from "./model/logger";
 import { Response } from "./model/response";
 import { launchToTaskDescription } from "./adapters/task.adapter";
 import { ParsedQs } from "qs";
 import {
   findOwner,
   getBugIdFromTestName,
-  isBugVerified,
-  isMarkedAsProductBugInRP,
   shouldCreateTask,
+  shouldMarkAsPBinRP,
 } from "./common/utils";
 import { JiraIssueTypes } from "./enums/jira-issue-types.enum";
 import { RpIssueTypes } from "./enums/rp-issue-types";
 import { issueKeyToBrowseLink } from "./adapters/urls.adapter";
 
-export const main = async (
-  id: number,
-  queryParams: ParsedQs,
-  logger?: Logger
-) => {
-  if (!logger) {
-    logger = new Logger();
-  }
+const logger = require("./common/common");
+
+export const main = async (id: number, queryParams: ParsedQs) => {
   const apiResponse: Response<string> = {
     success: false,
     message: "Something failed, see the logs for more info",
@@ -74,19 +67,17 @@ export const main = async (
     for (const item of launchFailedItems.content) {
       const suiteName = item.pathNames.itemPaths[0].name;
 
-      if (
-        item.name.toLowerCase().startsWith("bug") &&
-        !(await isBugVerified(item.name)) &&
-        !isMarkedAsProductBugInRP(item)
-      ) {
+      // Check if failure should be marked as bug in RP
+      if (await shouldMarkAsPBinRP(item)) {
         const bugId = getBugIdFromTestName(item.name);
         const bugLink = bugId ? issueKeyToBrowseLink(bugId) : "";
 
         updateIssueType(item.id, RpIssueTypes.ProductBug, bugLink);
-        logger.info(`Mark ${item.id}: ${item.name} as PB in RP`);
+        logger.info(`Marked ${item.id}: ${item.name} as PB in RP`);
       }
 
       if (!(await shouldCreateTask(suiteName, item))) {
+        logger.debug(`Should not create a task for ${suiteName}: ${item.name}`);
         continue;
       }
 

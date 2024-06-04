@@ -40,28 +40,29 @@ https://url-to-the-tool/1234?epic=XX-11
 
 ```mermaid
 flowchart TD
-    A[Run RPJ providing the RP launch id\nOptional: Provide Jira Epic key] --> B
-    B{Task for that launch\n already exists}
-    B --> |Yes| Z
-    B --> |No| C
-    C[Get launch data] --> D
-    D[Get next item] --> E
-    E{**RP** - Item is marked as PB &&\nJ - Bug is not verified in Jira &&\nPB is not market in RP}
-    E --> |No| D
-    E --> |Yes| F
-    F[RP - Mark item as PB in RP] --> G
-    G{Suite or test marked as a bug in its name &&\n J - Bug not verified in Jira &&\nPB not marked in RP}
-    G --> |No| C
-    G --> |Yes| H
-    H[J - Create Task For the RP run] --> I
-    I{Epic key provided} 
-    I --> |Yes| J[J - Update Task to set Epic] --> K
-    I --> |No| K
-    K[J - Create Subtask Task for each suite in Jira\nContaining all the failed tests of that suite] --> L
-    L[J - Update subtasks to set SP] --> Z
-    Z(END)
-    X[RP -> HTTP Request to Report Portal API\n J -> HTTP Request to Jira API]
+   A[Run RPJ providing the RP launch id\nOptional: Provide Jira Epic key] --> B
+   B{Task for that launch\n already exists}
+   B --> |Yes| Z
+   B --> |No| C
+   C[Get launch data] --> D
+   D[Get next item] --> E
+   E{**RP** - Item is marked as PB &&\nJ - Bug is not verified in Jira &&\nPB is not market in RP}
+   E --> |No| D
+   E --> |Yes| F
+   F[RP - Mark item as PB in RP] --> G
+   G{Suite or test marked as a bug in its name &&\n J - Bug not verified in Jira &&\nPB not marked in RP &&\n 'New' or 'In progress task' DOES NOT already exist for this item }
+   G --> |No| C
+   G --> |Yes| H
+   H[J - Create Task For the RP run] --> I
+   I{Epic key provided}
+   I --> |Yes| J[J - Update Task to set Epic] --> K
+   I --> |No| K
+   K[J - Create Subtask Task for each suite in Jira\nContaining all the failed tests of that suite] --> L
+   L[J - Update subtasks to set SP] --> Z
+   Z(END)
+   X[RP -> HTTP Request to Report Portal API\n J -> HTTP Request to Jira API]
 ```
+
 </details>
 
 # Roadmap
@@ -84,6 +85,7 @@ flowchart TD
 - [ ] Specify owners json file format in docs
 - [ ] Add item logs to the task description
 - [ ] Filter tests that are affected by bugs to avoid creating tasks
+- [ ] Reduce calls to Jira API by keeping a cache of issues queried
 
 # Tech Debt
 

@@ -18,7 +18,7 @@ import { JiraIssueTypes } from "./enums/jira-issue-types.enum";
 import { RpIssueTypes } from "./enums/rp-issue-types";
 import { issueKeyToBrowseLink } from "./adapters/urls.adapter";
 
-const logger = require("common/common")
+const logger = require("./common/common")
 
 export const main = async (
   id: number,

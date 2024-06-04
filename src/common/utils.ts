@@ -4,7 +4,7 @@ import { ENV } from "../../env";
 import { getIssue, search } from "../requests/jira";
 import { JiraStatuses } from "../enums/jira-statuses.enum";
 import { JiraIssueResponse } from "../model/jira-issue";
-const logger = require("common/common")
+const logger = require("./common")
 
 
 /**

@@ -1,6 +1,5 @@
 import { main } from "./core";
 import { Agent, setGlobalDispatcher } from "undici";
-import { Logger } from "./model/logger";
 import { Response } from "./model/response";
 import { Request } from "express";
 // Ignore self signed certs
@@ -12,7 +11,7 @@ const agent = new Agent({
 
 setGlobalDispatcher(agent);
 
-const logger = require("common/common")
+const logger = require("./common/common")
 const express = require("express");
 const app = express();
 const port = 3000;

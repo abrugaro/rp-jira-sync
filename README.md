@@ -84,6 +84,7 @@ flowchart TD
 - [ ] Specify owners json file format in docs
 - [ ] Add item logs to the task description
 - [ ] Filter tests that are affected by bugs to avoid creating tasks
+- [ ] Reduce calls to Jira API by keeping a cache of issues queried
 
 # Tech Debt
 

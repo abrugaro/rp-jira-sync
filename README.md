@@ -62,6 +62,7 @@ flowchart TD
    Z(END)
    X[RP -> HTTP Request to Report Portal API\n J -> HTTP Request to Jira API]
 ```
+
 </details>
 
 # Roadmap

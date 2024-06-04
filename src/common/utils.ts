@@ -4,8 +4,8 @@ import { ENV } from "../../env";
 import { getIssue, search } from "../requests/jira";
 import { JiraStatuses } from "../enums/jira-statuses.enum";
 import { JiraIssueResponse } from "../model/jira-issue";
-const logger = require("./common")
 
+const logger = require("./common");
 
 /**
  * Returns the owner of a test suite based on the OWNERS env param

@@ -59,7 +59,11 @@ export const getLaunchItemLogs = (launchId: number) => {
   );
 };
 
-export const updateIssueType = (itemId: number, issueType: RpIssueTypes, comments?: string) => {
+export const updateIssueType = (
+  itemId: number,
+  issueType: RpIssueTypes,
+  comments?: string
+) => {
   const url = `${ENV.reportPortalApiUrl}/${ENV.reportPortalProject}/item`;
   const data = {
     issues: [

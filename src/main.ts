@@ -11,7 +11,7 @@ const agent = new Agent({
 
 setGlobalDispatcher(agent);
 
-const logger = require("./common/common")
+const logger = require("./common/common");
 const express = require("express");
 const app = express();
 const port = 3000;

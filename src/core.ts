@@ -5,7 +5,6 @@ import {
   updateIssueType,
 } from "./requests/report-portal";
 import { ReportPortalItem } from "./model/report-portal-item";
-import { Logger } from "./model/logger";
 import { Response } from "./model/response";
 import { launchToTaskDescription } from "./adapters/task.adapter";
 import { ParsedQs } from "qs";

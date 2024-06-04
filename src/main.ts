@@ -30,7 +30,7 @@ app.get("/:id", async (req: Request, res: any) => {
   };
 
   try {
-    const result = await main(+id, req.query, logger);
+    const result = await main(+id, req.query);
     result.data = logger.getLogs();
     res.send(result);
   } catch (e) {

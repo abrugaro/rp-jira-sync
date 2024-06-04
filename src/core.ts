@@ -19,14 +19,12 @@ import { JiraIssueTypes } from "./enums/jira-issue-types.enum";
 import { RpIssueTypes } from "./enums/rp-issue-types";
 import { issueKeyToBrowseLink } from "./adapters/urls.adapter";
 
+const logger = require("common/common")
+
 export const main = async (
   id: number,
-  queryParams: ParsedQs,
-  logger?: Logger
+  queryParams: ParsedQs
 ) => {
-  if (!logger) {
-    logger = new Logger();
-  }
   const apiResponse: Response<string> = {
     success: false,
     message: "Something failed, see the logs for more info",

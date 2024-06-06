@@ -6,3 +6,5 @@ export const ENV = {
   jiraApiUrl: process.env.JIRA_API_URL,
   jiraProject: process.env.JIRA_PROJECT,
 }
+
+export const OWNERS: { [key: string]: string } = JSON.parse(process.env.OWNERS)

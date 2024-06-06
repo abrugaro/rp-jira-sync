@@ -128,7 +128,7 @@ https://url-to-the-tool/1234?epic=XX-11
 # Install
 
 1. Clone the repository
-2. Docker build and Docker run setting env vriables
+2. Docker build and Docker run setting env variables
 
 # Build
 

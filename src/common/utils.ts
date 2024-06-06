@@ -1,6 +1,5 @@
-import { OWNERS } from "../../owners";
 import { ReportPortalItem } from "../model/report-portal-item";
-import { ENV } from "../../env";
+import { ENV, OWNERS } from "../../env";
 import { getIssue, search } from "../requests/jira";
 import { JiraStatuses } from "../enums/jira-statuses.enum";
 import { JiraIssueResponse } from "../model/jira-issue";

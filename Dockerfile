@@ -10,7 +10,6 @@ ENV JIRA_PROJECT=""
 
 COPY . .
 COPY env.example.ts env.ts
-COPY owners.example.ts owners.ts
 RUN npm install
 RUN npm run build
 EXPOSE 3000

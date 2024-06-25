@@ -64,7 +64,7 @@ export const shouldCreateTask = async (
   }
 
   // A task shouldn't be created if the suite or test is marked as a product bug in Report Portal
-  if (!isMarkedAsProductBugInRP(item)) {
+  if (isMarkedAsProductBugInRP(item)) {
     logger.debug("Test is marked as PB in RP");
     return false;
   }

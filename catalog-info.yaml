@@ -9,5 +9,6 @@ metadata:
     github.com/project-slug: abrugaro/rp-jira-sync
 spec:
   owner: abrugaro
+  domain: quality-community/quality-community
   type: library
   lifecycle: experimental

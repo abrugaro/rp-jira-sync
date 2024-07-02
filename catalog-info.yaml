@@ -2,6 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: RPJ-Report_Portal_to_Jira_Tool
+  title: RPJ-Report_Portal_to_Jira_Tool
   namespace: quality-community
   description: |
     Automatic Synchronization between Report Portal and Jira.

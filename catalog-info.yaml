@@ -2,13 +2,17 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: RPJ-Report_Portal_to_Jira_Tool
+  namespace: quality-community
   description: |
     Automatic Synchronization between Report Portal and Jira.
     Create tasks and subtasks from test suites failures in Report Portal Launchs
   annotations:
     github.com/project-slug: abrugaro/rp-jira-sync
+  tags:
+    - jira
+    - report-portal
 spec:
   owner: abrugaro
   domain: quality-community/quality-community
   type: library
-  lifecycle: experimental
+  lifecycle: experimental.

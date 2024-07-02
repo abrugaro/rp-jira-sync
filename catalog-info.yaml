@@ -16,4 +16,4 @@ spec:
   owner: abrugaro
   domain: quality-community/quality-community
   type: library
-  lifecycle: experimental.
+  lifecycle: experimental

@@ -9,6 +9,9 @@ metadata:
     Create tasks and subtasks from test suites failures in Report Portal Launchs
   annotations:
     github.com/project-slug: abrugaro/rp-jira-sync
+  links:
+    - title: Docs
+      url: https://github.com/abrugaro/rp-jira-sync?tab=readme-ov-file#rpj--report-portal-to-jira
   tags:
     - jira
     - report-portal

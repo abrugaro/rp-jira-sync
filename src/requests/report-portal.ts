@@ -4,6 +4,7 @@ import { ReportPortalItem } from "../model/report-portal-item";
 import { ReportPortalResponse } from "../model/report-portal-response";
 import { ReportPortalItemLog } from "../model/report-portal-item-log";
 import { RpIssueTypes } from "../enums/rp-issue-types";
+import { ReportPortalUser } from "../model/report-portal-user";
 
 const headers = {
   Authorization: `Bearer ${ENV.reportPortalToken}`,
@@ -21,6 +22,21 @@ export const getLatestLaunch = () => {
     (response) =>
       response.json() as Promise<ReportPortalResponse<ReportPortalLaunch>>
   );
+};
+
+export const getUserInfo = async (): Promise<ReportPortalUser> => {
+  const response = await fetch(`${ENV.reportPortalApiUrl}/user`, {
+    method: "GET",
+    headers,
+  });
+
+  if (response.status !== 200) {
+    throw new Error(
+      `Cannot reach Report Portal Instance ${await response.text()}`
+    );
+  }
+
+  return response.json();
 };
 
 export const getLaunchById = (launchId: number) => {

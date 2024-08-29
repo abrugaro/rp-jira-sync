@@ -2,6 +2,7 @@ import { ENV } from "../../env";
 import { JiraIssueParams, JiraIssueResponse } from "../model/jira-issue";
 import { RecursivePartial } from "../model/common";
 import { JiraIssueTypes } from "../enums/jira-issue-types.enum";
+import { JiraServerInfo } from "../model/jira-server-info";
 
 const headers = {
   Authorization: `Bearer ${ENV.jiraAccessToken}`,
@@ -51,6 +52,19 @@ export const getIssue = async (
   if (response.status >= 400) {
     throw new Error(
       `Status ${response.status} when getting issue ${issueKey} wit error ${await response.text()}`
+    );
+  }
+
+  return response.json();
+};
+
+export const getJiraServerInfo = async (): Promise<JiraServerInfo> => {
+  const response = await fetch(`${ENV.jiraApiUrl}/serverInfo`, {
+    headers,
+  });
+  if (response.status >= 400) {
+    throw new Error(
+      `Cannot get server info ${await response.text()}`
     );
   }
 

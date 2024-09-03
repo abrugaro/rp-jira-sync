@@ -51,9 +51,9 @@ export const getLaunchById = (launchId: number) => {
   );
 };
 
-export const getLaunchFailedItems = (launchId: number) => {
+export const getLaunchFailedItems = (launchId: number, page = 1) => {
   const url = `${ENV.reportPortalApiUrl}/${ENV.reportPortalProject}/item`;
-  const query = `filter.eq.launchId=${launchId}&filter.eq.status=FAILED&page.size=100&filter.eq.type=STEP`;
+  const query = `filter.eq.launchId=${launchId}&filter.eq.status=FAILED&page.size=100&filter.eq.type=STEP&page.page=${page}`;
   return fetch(`${url}?${query}`, {
     method: "GET",
     headers,

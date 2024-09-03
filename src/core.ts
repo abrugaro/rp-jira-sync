@@ -48,49 +48,56 @@ export const main = async (id: number, queryParams: ParsedQs) => {
   }
   const launchId = launchResponse.content[0].id;
 
-  // Get launch failed items details
-  const launchFailedItems = await getLaunchFailedItems(launchId);
-  logger.debug(launchFailedItems);
-  if (!launchFailedItems) {
-    logger.error("Launch Failed items error response");
-    return apiResponse;
-  }
-
-  if (!launchFailedItems.content.length) {
-    logger.info("No failed items found");
-    return apiResponse;
-  }
-
   // Map failed items by their test suite
   const itemsBySuite: { [key: string]: ReportPortalItem[] } = {};
-  try {
-    for (const item of launchFailedItems.content) {
-      const suiteName = item.pathNames.itemPaths[0].name;
 
-      // Check if failure should be marked as bug in RP
-      if (await shouldMarkAsPBinRP(item)) {
-        const bugId = getBugIdFromTestName(item.name);
-        const bugLink = bugId ? issueKeyToBrowseLink(bugId) : "";
+  const launchFailedItemsResponse = await getLaunchFailedItems(launchId);
+  for (let page = 0; page < launchFailedItemsResponse.page.totalPages; page++) {
 
-        updateIssueType(item.id, RpIssueTypes.ProductBug, bugLink);
-        logger.info(`Marked ${item.id}: ${item.name} as PB in RP`);
-      }
-
-      if (!(await shouldCreateTask(suiteName, item))) {
-        logger.debug(`Should not create a task for ${suiteName}: ${item.name}`);
-        continue;
-      }
-
-      if (!itemsBySuite[suiteName]) {
-        itemsBySuite[suiteName] = [];
-      }
-      itemsBySuite[suiteName].push(item);
+    // Get launch failed items details, page count starts at 1
+    const launchFailedItems = await getLaunchFailedItems(launchId, page + 1);
+    logger.debug(`Launch failed items page ${page + 1}`);
+    logger.debug(launchFailedItems);
+    if (!launchFailedItems) {
+      logger.error("Launch Failed items error response");
+      return apiResponse;
     }
-  } catch (e) {
-    logger.error("Error while mapping suites");
-    logger.error(e);
-    return apiResponse;
+
+    if (!launchFailedItems.content.length) {
+      logger.info("No failed items found");
+      return apiResponse;
+    }
+
+    try {
+      for (const item of launchFailedItems.content) {
+        const suiteName = item.pathNames.itemPaths[0].name;
+
+        // Check if failure should be marked as bug in RP
+        if (await shouldMarkAsPBinRP(item)) {
+          const bugId = getBugIdFromTestName(item.name);
+          const bugLink = bugId ? issueKeyToBrowseLink(bugId) : "";
+
+          updateIssueType(item.id, RpIssueTypes.ProductBug, bugLink);
+          logger.info(`Marked ${item.id}: ${item.name} as PB in RP`);
+        }
+
+        if (!(await shouldCreateTask(suiteName, item))) {
+          logger.debug(`Should not create a task for ${suiteName}: ${item.name}`);
+          continue;
+        }
+
+        if (!itemsBySuite[suiteName]) {
+          itemsBySuite[suiteName] = [];
+        }
+        itemsBySuite[suiteName].push(item);
+      }
+    } catch (e) {
+      logger.error("Error while mapping suites");
+      logger.error(e);
+      return apiResponse;
+    }
   }
+
 
   let jiraTask = null;
   try {

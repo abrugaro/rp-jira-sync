@@ -122,6 +122,7 @@ https://url-to-the-tool/1234?epic=XX-11
 - [ ] Add an env variable to map custom jira fields to usable names
 - [ ] Add husky with lint-stage to enforce linting
 - [ ] Add time mark to logs
+- [ ] Include spec name in task description
 - [ ] Add item logs to the task description
 - [ ] Reduce calls to Jira API by keeping a cache of issues queried
 

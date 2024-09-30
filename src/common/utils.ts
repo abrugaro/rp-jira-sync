@@ -52,13 +52,13 @@ export const shouldCreateTask = async (
   suiteName: string,
   item: ReportPortalItem
 ): Promise<boolean> => {
-  // A task shouldn't be created if the suite or test is marked with a bug that is not verified in its name
-  if (isElementMarkedAsBug(suiteName) && !(await isBugVerified(suiteName))) {
+  // A task shouldn't be created if the suite or test is marked with a bug that is open in its name
+  if (isElementMarkedAsBug(suiteName) && (await isBugOpen(suiteName))) {
     logger.debug("Suite is marked with a non verified bug");
     return false;
   }
 
-  if (isElementMarkedAsBug(item.name) && !(await isBugVerified(item.name))) {
+  if (isElementMarkedAsBug(item.name) && (await isBugOpen(item.name))) {
     logger.debug("Test is marked with a non verified bug");
     return false;
   }
@@ -94,7 +94,7 @@ export const shouldCreateTask = async (
  * A failure should be marked as PB in RP if
  * 1. It is marked as a Bug in the element name
  * 2. It is NOT already marked as a PB in RP
- * 3. The bug is not verified in Jira (or it is an external bug)
+ * 3. The bug is open in Jira (or it is an external bug)
  * @param item
  */
 export const shouldMarkAsPBinRP = async (
@@ -103,7 +103,7 @@ export const shouldMarkAsPBinRP = async (
   return (
     isElementMarkedAsBug(item.name) &&
     !isMarkedAsProductBugInRP(item) &&
-    !(await isBugVerified(item.name))
+    (await isBugOpen(item.name))
   );
 };
 
@@ -111,7 +111,7 @@ export const shouldMarkAsPBinRP = async (
  *
  * @param suiteOrTestName
  */
-export const isBugVerified = async (suiteOrTestName: string) => {
+export const isBugOpen = async (suiteOrTestName: string) => {
   const bugId = getBugIdFromTestName(suiteOrTestName);
 
   if (!bugId) {
@@ -124,7 +124,7 @@ export const isBugVerified = async (suiteOrTestName: string) => {
   }
 
   const issue = await getIssue(bugId);
-  return issue.fields.status.name.toLowerCase() === "verified";
+  return !["verified", "closed", "on_qa"].includes(issue.fields.status.name.toLowerCase());
 };
 
 export const isMarkedAsProductBugInRP = (item: ReportPortalItem) => {

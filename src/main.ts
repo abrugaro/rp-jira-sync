@@ -40,6 +40,7 @@ app.get("/:id", async (req: Request, res: any) => {
     res.send(apiResponse);
   } finally {
     console.log(logger.getLogs());
+    logger.clear();
   }
 });
 
@@ -61,6 +62,7 @@ app.get("/", async (req: Request, res: any) => {
     res.send(apiResponse);
   } finally {
     console.log(logger.getLogs());
+    logger.clear();
   }
 });
 

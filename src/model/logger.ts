@@ -7,6 +7,10 @@ export class Logger {
     this.log = "";
   }
 
+  public clear() {
+    this.log = "";
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public info(message: any) {
     this.log = this.log.concat(`\n[INFO] ${util.format(message)}`);

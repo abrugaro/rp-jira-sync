@@ -38,7 +38,7 @@ export const isElementMarkedAsBug = (elementName: string) => {
   return (
     (elementName.includes('"before all"') ||
       elementName.includes('"after all"')) &&
-    elementName.includes('"BUG ')
+    elementName.includes('"bug ')
   );
 };
 

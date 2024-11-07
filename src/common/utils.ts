@@ -31,15 +31,7 @@ export const findOwner = (suite: string) => {
  */
 export const isElementMarkedAsBug = (elementName: string) => {
   elementName = elementName.trim().toLowerCase();
-  if (elementName.startsWith("bug")) {
-    return true;
-  }
-
-  return (
-    (elementName.includes('"before all"') ||
-      elementName.includes('"after all"')) &&
-    elementName.includes('"bug ')
-  );
+  return elementName.includes("bug ") && elementName.includes(":")
 };
 
 /**
@@ -54,18 +46,18 @@ export const shouldCreateTask = async (
 ): Promise<boolean> => {
   // A task shouldn't be created if the suite or test is marked with a bug that is open in its name
   if (isElementMarkedAsBug(suiteName) && (await isBugOpen(suiteName))) {
-    logger.debug("Suite is marked with a non verified bug");
+    logger.debug(`Suite ${suiteName} is marked with a non verified bug`);
     return false;
   }
 
   if (isElementMarkedAsBug(item.name) && (await isBugOpen(item.name))) {
-    logger.debug("Test is marked with a non verified bug");
+    logger.debug(`Test ${item.name} is marked with a non verified bug`);
     return false;
   }
 
   // A task shouldn't be created if the suite or test is marked as a product bug in Report Portal
   if (isMarkedAsProductBugInRP(item)) {
-    logger.debug("Test is marked as PB in RP");
+    logger.debug(`Test ${item.name} is marked as PB in RP`);
     return false;
   }
 
@@ -82,7 +74,7 @@ export const shouldCreateTask = async (
           issue.fields.summary === `[QE] Fix JF for ${suiteName}`
       )
     ) {
-      logger.debug("A non-finished task already exists for this suite");
+      logger.debug(`A non-finished task already exists for suite ${suiteName}`);
       return false;
     }
   }
@@ -136,16 +128,14 @@ export const isMarkedAsProductBugInRP = (item: ReportPortalItem) => {
 
 /**
  * Returns the bug link from a test or suite name
- * This method assumess that the bug is marked in the test name as "Bug XXXX: Test name"
+ * This method assumes that the bug is marked in the test name as "Bug JIRA_PROJECT_KEY-XXXX: Test name"
  * @param testName
  */
 export function getBugIdFromTestName(testName: string): string {
-  const first = testName.split(":")[0];
-  if (!first && !first.startsWith(ENV.jiraProject)) {
+  const match = testName.toLowerCase().match(/bug\s([a-z]+-\d+):/);
+  if (!match || !match[1].toUpperCase().startsWith(ENV.jiraProject)) {
     return null;
   }
 
-  const id = first.split(" ")[1];
-
-  return id ?? null;
+  return match[1].toUpperCase();
 }

@@ -107,6 +107,8 @@ export const main = async (id: number, queryParams: ParsedQs) => {
       `Fix failures for RP Run ${launchResponse.content[0].number}\n ${launchResponse.content[0].description}`
     );
 
+    logger.info(`CREATED MAIN TASK: ${jiraTask.key}`);
+
     if (queryParams.epic) {
       await updateIssue(jiraTask.id, {
         fields: { customfield_12311140: queryParams.epic as string },

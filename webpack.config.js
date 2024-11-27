@@ -1,5 +1,7 @@
 const path = require("path")
 const nodeExternals = require("webpack-node-externals")
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 
 module.exports = {
   entry: "./src/main.ts",
@@ -26,4 +28,13 @@ module.exports = {
   optimization: {
     //minimize: false
   },
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/pages', to: 'pages' },
+      ]
+    })
+  ]
 }
+
+

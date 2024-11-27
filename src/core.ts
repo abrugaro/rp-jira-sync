@@ -5,7 +5,7 @@ import {
   updateIssueType,
 } from "./requests/report-portal";
 import { ReportPortalItem } from "./model/report-portal-item";
-import { Response } from "./model/response";
+import { ExecutionResponseData, Response } from "./model/response";
 import { launchToTaskDescription } from "./adapters/task.adapter";
 import { ParsedQs } from "qs";
 import {
@@ -17,14 +17,16 @@ import {
 import { JiraIssueTypes } from "./enums/jira-issue-types.enum";
 import { RpIssueTypes } from "./enums/rp-issue-types";
 import { issueKeyToBrowseLink } from "./adapters/urls.adapter";
+import { ENV } from "../env";
 
 const logger = require("./common/common");
 
 export const main = async (id: number, queryParams: ParsedQs) => {
-  const apiResponse: Response<string> = {
+  const apiResponse: Response<ExecutionResponseData> = {
     success: false,
     message: "Something failed, see the logs for more info",
-    data: "",
+    data: {mainTaskKey: null, mainTaskLink: null},
+    logs: ""
   };
 
   // Check if a task already exists for the specified run
@@ -108,6 +110,8 @@ export const main = async (id: number, queryParams: ParsedQs) => {
     );
 
     logger.info(`CREATED MAIN TASK: ${jiraTask.key}`);
+    apiResponse.data.mainTaskKey = jiraTask.key;
+    apiResponse.data.mainTaskLink = ENV.jiraApiUrl.replace("/rest/api/2", "/browse/") + jiraTask.key;
 
     if (queryParams.epic) {
       await updateIssue(jiraTask.id, {

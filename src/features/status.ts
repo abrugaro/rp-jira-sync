@@ -8,6 +8,7 @@ export const getStatus = async () => {
     success: true,
     message: "RPJ is deployed and all services are reachable",
     data: "",
+    logs: ""
   };
 
   try {

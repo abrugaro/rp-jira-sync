@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trigger RPJ</title>
+  <script src="./trigger.js" defer></script>
+  <link rel="stylesheet" href="./trigger.css">
+</head>
+<body>
+<div>
+  <span>
+  <b>Note:</b> The id of the RP launch is not the ID of the Jenkins job
+  You can also pass the link to the RP Launch and the ID will be extracted automatically
+</span>
+</div>
+<div>
+  <label for="rpIdInput">
+    Link or ID of the report portal launch
+    <input type="text" id="rpIdInput">
+  </label>
+  <label for="epicKeyInput">
+    KEY of the Jira Epic to associate the tasks with
+    <input type="text" id="epicKeyInput">
+  </label>
+  <button id="btnTrigger">Create Tasks</button>
+</div>
+<div id="divResult"></div>
+</body>
+</html>

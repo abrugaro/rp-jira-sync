@@ -32,7 +32,6 @@ flowchart TD
 
 </details>
 
-
 # Configuration
 
 ### Environment Variables
@@ -46,8 +45,8 @@ These variables should be set in your environment before running the tool:
 - `JIRA_API_URL`: The API URL for Jira.
 - `JIRA_PROJECT`: The name of the project in Jira.
 - `OWNERS`: A JSON string representing the owners for different test suites.
-  - **key**: Name of test suite
-  - **value**: Owner's Jira username
+    - **key**: Name of test suite
+    - **value**: Owner's Jira username
 
 ### Example Configuration
 
@@ -95,16 +94,40 @@ desired epic.
 **Example with Epic:**
 
 ```
-https://url-to-the-tool/{launch_id}?epic={epic_code}
+https://url-to-the-tool/{launch_id}?epic={epic_key}
 ```
 
-Where `{epic_code}` is replaced by the actual Epic code.
+Where `{epic_key}` is replaced by the actual Epic code.
 
 For example, here, XX-11 is the code of the epic.:
 
 ```
 https://url-to-the-tool/1234?epic=XX-11
 ```
+
+# Assigning Subtasks to a Specific Parent Task
+
+You can now use the optional `parentTask` parameter to automatically assign all created subtasks to a specific Jira task
+instead of creating a new parent task.
+
+Example with Parent Task:
+
+```
+https://url-to-the-tool/{launch_id}?parentTask={task_key}
+```
+
+Where `{task_key}` is replaced by the key of the specific parent task in Jira.
+
+For example, if the parent task key is `ABC-123`:
+
+```
+https://url-to-the-tool/1234?parentTask=ABC-123
+```
+
+In this case A new parent task will not be created. and ll generated subtasks will be assigned to `ABC-123`.
+
+**Note**: The parent task summary would be automatically modified to include the RP launch id as it is needed for checking
+if the task already exists
 
 # Roadmap
 
@@ -131,14 +154,14 @@ https://url-to-the-tool/1234?epic=XX-11
 1. Clone the repository
 2. Docker build and Docker run setting env variables
 
-# Build
+# Development
 
-```bash
-npm run build
-```
+## Running the Project
+For running the project locally, you'll need access to a Jira and a Report Portal instances
 
-# Execute
+1. Clone the repository
+2. Copy the `env.example.ts` file and rename it to `env.ts`
+   1. Replace the variables with your custom values (Check [Configuration](#Configuration) for more info)
+3. Install the dependencies with `npm install`
+4. Start the local environment with `npm run serve`
 
-```bash
-npm run start
-```

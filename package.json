@@ -2,6 +2,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "node dist/bundle.js",
+    "watch": "webpack --mode production --watch",
+    "serve": "webpack --watch --mode production & nodemon dist/bundle.js",
     "lint": "eslint src/**/*",
     "prettier:fix": "prettier --write src README.md"
   },
@@ -24,6 +26,7 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
     "globals": "^15.0.0",
+    "nodemon": "^3.1.9",
     "prettier": "3.2.5",
     "ts-loader": "^9.5.1",
     "typescript": "^5.4.5",

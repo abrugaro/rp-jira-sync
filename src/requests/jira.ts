@@ -46,6 +46,8 @@ export const createIssue = async (
 export const getIssue = async (
   issueKey: string
 ): Promise<JiraIssueResponse> => {
+  await new Promise(r => setTimeout(r, 700)); // sleep to accommodate to Jira API rate limits
+
   const response = await fetch(`${ENV.jiraApiUrl}/issue/${issueKey}`, {
     headers,
   });
@@ -59,6 +61,7 @@ export const getIssue = async (
 };
 
 export const getJiraServerInfo = async (): Promise<JiraServerInfo> => {
+  await new Promise(r => setTimeout(r, 700)); // sleep to accommodate to Jira API rate limits
   const response = await fetch(`${ENV.jiraApiUrl}/serverInfo`, {
     headers,
   });
@@ -95,6 +98,7 @@ export const search = async (searchTerm: string) => {
 };
 
 const doIssuePostRequest = async <T>(data: JiraIssueParams): Promise<T> => {
+  await new Promise(r => setTimeout(r, 700)); // sleep to accommodate to Jira API rate limits
   const response = await fetch(`${ENV.jiraApiUrl}/issue`, {
     method: "POST",
     headers,
@@ -113,6 +117,7 @@ const doIssuePutRequest = async (
   data: RecursivePartial<JiraIssueParams>,
   issueId: string
 ): Promise<string> => {
+  await new Promise(r => setTimeout(r, 700)); // sleep to accommodate to Jira API rate limits
   const response = await fetch(`${ENV.jiraApiUrl}/issue/${issueId}`, {
     method: "PUT",
     headers,

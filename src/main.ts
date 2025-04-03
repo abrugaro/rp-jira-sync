@@ -56,7 +56,7 @@ app.get("/:id", async (req: Request, res: any) => {
 app.get("/", async (req: Request, res: any) => {
   const apiResponse: Response<string> = {
     success: false,
-    message: "Something failed, see the logs for more info",
+    message: "Something failed, see the logs for more infoAAAAAAAA",
     data: "",
     logs: ""
   };

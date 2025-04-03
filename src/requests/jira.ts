@@ -82,6 +82,7 @@ export const updateIssue = async (
 };
 
 export const search = async (searchTerm: string) => {
+  await new Promise(r => setTimeout(r, 700)); // sleep to accommodate to Jira API rate limits
   const response = await fetch(
     `${ENV.jiraApiUrl}/search?jql=project=MTA AND ${searchTerm}`,
     {

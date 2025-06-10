@@ -9,7 +9,7 @@ export function launchToTaskDescription(
   const attrKeys = launch.attributes.map((attr) => attr.key).join("||");
   const attrValues = launch.attributes.map((attr) => attr.value).join("|");
   const rpUrl = ENV.reportPortalApiUrl
-    .replace("/api/", "/ui/")
+    .replace("/api/v1", "/ui/")
     .concat(
       `/#${ENV.reportPortalProject}/launches/all/${launch.id}/${suiteItems[0].parent}`
     );
